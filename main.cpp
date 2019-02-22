@@ -13,6 +13,16 @@ random_device rd;
 mt19937 mt(rd());
 uniform_real_distribution<double> dist(0.0, RAND_MAX);
 
+// a flag that determines the format of the output file 
+// false = simple-text format for further processing
+// true = GraphViz format to export graph as picture later 
+const bool saveGraphForm = true;
+
+// a flag that determines if the console output is needed
+// false = no results are displayed after generation - works faster
+// true = results are being shown in console for each node/edge - might work exceptionally slow with bigger graphs
+const bool displayResults = true;
+
 // a custom function to generate pseudorandom floats between MIN and MAX
 // note: this can be easily type-casted like "(int)rnd_num(x,y)" to integers with float part truncated
 float rnd_num(float MIN, float MAX){
@@ -56,7 +66,7 @@ int main() {
 		return 1; // stop the program and go cry		
 	}
 
-	cout << "Please enter the maximum number of edges per node: " ;
+	cout << "Please enter the maximum number of edges to spawn per node: " ;
 	int max_edges_per_node;
 	cin >> max_edges_per_node;
 
@@ -165,27 +175,58 @@ int main() {
 		nodes[i].hasSpreadEdges = true; // this node has produced nodes, toggle the flag
 	}
 
-	// display the results
+	// display the results and save them to file
 	// TODO: write results to text file while displaying them in the same loop.
-	cout << "The shipping roadmap graph has been constructed. Details follow below." << endl;
-	for (unsigned int i=0; i<nodes.size(); i++){
-		cout << "Node [" << nodes[i].id << "]";
-		switch(nodes[i].type){
-		case 0:
-			cout << " is a JOINT" << endl;
-			break;
-		case 1:
-			cout << " is a STORE" << endl;
-			break;
-		case 2:
-			cout << " is a WAREHOUSE" << endl;
-			break;
-		}
-		for (unsigned int k=0; k<nodes[i].edges.size(); k++){
-			cout << "> Edge between nodes [" << nodes[i].id << "] and [" << nodes[i].edges[k].dest_id << "]" << endl;
-			cout << ">> Distance: " << nodes[i].edges[k].distance << "; Time to traverse: " << nodes[i].edges[k].time << endl;
-		}
+	ofstream graph;
+	graph.open("graph.txt");
+
+	// GraphViz needs some header information to know that this graph is undirected
+	if (saveGraphForm){
+		graph << "graph G {" << endl;
 	}
 
+	cout << "The shipping roadmap graph has been constructed." << endl;
+	for (unsigned int i=0; i<nodes.size(); i++){
+		// display node type
+		if (displayResults){
+			cout << "Node [" << nodes[i].id << "]";
+			switch(nodes[i].type){
+			case 0:
+				cout << " is a JOINT" << endl;
+				break;
+			case 1:
+				cout << " is a STORE" << endl;
+				break;
+			case 2:
+				cout << " is a WAREHOUSE" << endl;
+				break;
+			}		
+		}
 
+
+
+		// display edges of current node
+		for (unsigned int k=0; k<nodes[i].edges.size(); k++){
+			if (displayResults){
+				cout << "> Edge between nodes [" << nodes[i].id << "] and [" << nodes[i].edges[k].dest_id << "]" << endl;
+				cout << ">> Distance: " << nodes[i].edges[k].distance << "; Time to traverse: " << nodes[i].edges[k].time << endl;			
+			}
+
+			// save to file in GraphViz syntax
+			if (saveGraphForm){
+				graph << '"' << nodes[i].id << "\"--\"" << nodes[i].edges[k].dest_id << "\"[label=\"" << " d = " << nodes[i].edges[k].distance << "\\n" << " t = " << nodes[i].edges[k].time << "\"]" << endl;
+			}
+
+		}
+
+	}
+
+	// GraphViz undirected graph is done, closing it with final bracket
+	if (saveGraphForm){
+		graph << "}";
+	}
+	// close the file - saving is done
+	graph.close();
+
+return 0; // quit program
 }
