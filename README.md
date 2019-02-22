@@ -1,9 +1,8 @@
 # cs820-project
-CS820 project repository. 
+CS820 Artificial Intelligence Group Project repository.
 
-Let's not worry a lot now about folders structure because it can slow down things. Let's start using only the root of the repository(the one which has the helloword.cpp file). 
+The `graph-generator` folder contains the code related to roadmap graph generation, that involves saving the resulting graph in a formatted `.txt`file.
 
-But the idea would be:
-In the `graph-generator` folder goes the files related to create a `.txt`(or another) and save it in the `root` folder.
+The `graph-algorithms` folder the code related to processing the graphs generated in the form of the `.txt' files. The algorithm(s) will read the graph structure, determine the best way to solve the shipping problem on it (i.e. maximizing and/or equalizing the amount of goods delivered + minimizing the overall costs of shipping), and then the results will be displayed to the console and/or saved to another '.txt' formatted file.
 
-In the `graph-algorithms` folder goes the files related to read the saved graphs from the `.txt`(or another) at `root`, make the computations and save the results as a `.txt`(or another) in the root folder.
+This is a WIP, new details will appear here soon.
