@@ -1,6 +1,7 @@
 #include <vector>
 #include <string>
 #include <time.h>
+#include <math.h>
 #include <iostream>
 #include <fstream>
 #include <random>
@@ -23,6 +24,9 @@ const bool saveGraphForm = true;
 // true = results are being shown in console for each node/edge - might work exceptionally slow with bigger graphs
 const bool displayResults = true;
 
+// the default square km size of the map
+const float MAX_MAP_SIZE = 1000.0;
+
 // a custom function to generate pseudorandom floats between MIN and MAX
 // note: this can be easily type-casted like "(int)rnd_num(x,y)" to integers with float part truncated
 float rnd_num(float MIN, float MAX){
@@ -41,13 +45,16 @@ bool coinflip(){
 // movement graph data structures
 struct edge { 
 int dest_id; // edge destination node id
-int distance; // distance to travel
+float distance; // distance to travel
 int time; // time to spend on travel
 };
 
 struct node {
 int id;
 int type; // 0 - joint; 1 - store; 2 - warehouse
+vector<int> supply;
+vector<int> demand;
+float x,y; // node coordinates
 vector<edge> edges; // storage for edges of the node
 bool hasSpreadEdges; // flag to check if the node yet tried to edges
 };
@@ -102,6 +109,29 @@ int main() {
 		cout << "Hey, you want more warehouses/stores than the number of nodes to be generated. You're fucked up!" << endl;
 		return 1; // stop the program and go cry
 	}
+
+	int good_types;
+	cout << "How many types of goods would you have?: " ;
+	cin >> good_types;
+	if (good_types < 1) { // quick check if the user is a complete retard
+		cout << "Hey, will then have no goods at all. You're fucked up!" << endl;
+		return 1; // stop the program and go cry		
+	}
+
+	// ask the total number of goods supplied/demanded
+	vector<int> supply;
+	vector<int> demand;
+	int total = 0;
+	for (int i=0; i<good_types; i++){
+		cout << "What is the total number of goods of type [" << i+1 << "] supplied by warehouses?: ";
+		int buff;
+		cin >> buff;
+		supply.push_back(buff); // load this type of good's total supply
+		cout << "What is the total number of goods of type [" << i+1 << "] demanded by stores?: ";
+		cin >> buff;
+		demand.push_back(buff); // load this type of good's total demand
+	}
+
 	cout << "Okay, I am going to generate the shipping roadmap graph now. Hold on tight." << endl;
 
 	// create the requested number of nodes
@@ -110,10 +140,19 @@ int main() {
 		n.id = i; // assign node id
 		n.type = 0; // during initial placement - all nodes are type 0, joints. may be converted into stores/warehouses later
 		n.hasSpreadEdges = false; // all new-born nodes will have to produce edges
+		// assign random node coordinates
+		n.x = rnd_num(0.0,MAX_MAP_SIZE);
+		n.y = rnd_num(0.0,MAX_MAP_SIZE);
+		for (int i=0; i<good_types; i++){ // initialize the arrays
+			n.supply.push_back(0);
+			n.demand.push_back(0);
+		}
 		nodes.push_back(n); // load the created node into the global storage
 	}
 
 	// now turn random joint nodes into stores and warehouses
+	vector<int> store_ids;
+	vector<int> warehouse_ids;
 	// create stores
 	for (int i=0; i<max_stores; i++){
 		int replacement_node_id = (int)rnd_num(0.0,(float)nodes.size()); // pick any node id
@@ -121,6 +160,7 @@ int main() {
 		do {
 			replacement_node_id = (int)rnd_num(0.0,(float)nodes.size()); // pick any node id again
 		} while (nodes[replacement_node_id].type > 0); // re-roll the loop if a non-joint node was selected for replacement
+		store_ids.push_back(replacement_node_id); // record the store id
 		nodes[replacement_node_id].type = 1; // replace this joint with a store
 	}
 	// create warehouses
@@ -130,7 +170,32 @@ int main() {
 		do {
 			replacement_node_id = (int)rnd_num(0.0,(float)nodes.size()); // pick any node id again
 		} while (nodes[replacement_node_id].type > 0); // re-roll the loop if a non-joint node was selected for replacement
+		warehouse_ids.push_back(replacement_node_id); // record the store id
 		nodes[replacement_node_id].type = 2; // replace this joint with a warehouse
+	}
+
+	// load the shipping problem parameters
+	for (int i=0; i<good_types; i++){
+		// fill warehouses with goods
+		while (supply[i] > 0) {
+			for (unsigned int w=0; w<warehouse_ids.size(); w++){
+				if (supply[i] != 0){ // if any supply left
+					nodes[warehouse_ids[w]].supply[i] += 1; // load good to warehouse
+					supply[i]--; // reduce remaining supply of that type by 1
+				}
+			}		
+		}
+
+		while (demand[i] > 0){
+			// set the demands of each store
+			for (unsigned int s=0; s<store_ids.size(); s++){
+				if (demand[i] != 0){ // if any demand left
+					nodes[store_ids[s]].demand[i] += 1; // load good to warehouse
+					demand[i]--; // reduce remaining supply of that type by 1
+				}	
+			}		
+		}
+	
 	}
 
 	// once the nodes have been created, let's create the edges between them
@@ -147,8 +212,7 @@ int main() {
 					}
 				} // re-roll the loop if edge source and destination nodes are the same
 				// generate edge distance
-				// TODO: make these distances real and somewhat related to time - consider the velocity of the truck maybe?
-				e.distance = (int)rnd_num(1.0,200.0);
+				e.distance = sqrtf(powf(nodes[i].x - nodes[e.dest_id].x, 2) + powf(nodes[i].y - nodes[e.dest_id].y, 2));
 				// generate edge time
 				// TODO: make these times reasonable - consider minutes, hours?
 				e.time = (int)rnd_num(30.0,120.0); // for now - let it be minutes of transition
@@ -165,8 +229,7 @@ int main() {
 				}
 			} // re-roll the loop if edge source and destination nodes are the same
 			// generate edge distance
-			// TODO: make these distances real and somewhat related to time - consider the velocity of the truck maybe?
-			e.distance = (int)rnd_num(1.0,200.0);
+			e.distance = sqrtf(powf(nodes[i].x - nodes[e.dest_id].x, 2) + powf(nodes[i].y - nodes[e.dest_id].y, 2));
 			// generate edge time
 			// TODO: make these times reasonable - consider minutes, hours?
 			e.time = (int)rnd_num(30.0,120.0); // for now - let it be minutes of transition
@@ -213,6 +276,7 @@ int main() {
 			}
 
 			// save to file in GraphViz syntax
+			// nodes[i].id
 			if (saveGraphForm){
 				graph << '"' << nodes[i].id << "\"--\"" << nodes[i].edges[k].dest_id << "\"[label=\"" << " d = " << nodes[i].edges[k].distance << "\\n" << " t = " << nodes[i].edges[k].time << "\"]" << endl;
 			}
