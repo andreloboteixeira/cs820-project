@@ -5,6 +5,8 @@
 #include <iostream>
 #include <fstream>
 #include <random>
+#include <string>
+
 
 
 using namespace std;
@@ -250,24 +252,33 @@ int main() {
 
 	cout << "The shipping roadmap graph has been constructed." << endl;
 	for (unsigned int i=0; i<nodes.size(); i++){
+		string nodeType = "";
+		
 		// display node type
 		if (displayResults){
 			cout << "Node [" << nodes[i].id << "]";
 			switch(nodes[i].type){
 			case 0:
 				cout << " is a JOINT" << endl;
+				nodeType = "JOINT";
 				break;
 			case 1:
 				cout << " is a STORE" << endl;
+				nodeType = "STORE";
 				break;
 			case 2:
 				cout << " is a WAREHOUSE" << endl;
+				nodeType = "WAREHOUSE";
 				break;
 			}		
 		}
 
-
-
+		if (saveGraphForm){
+			graph << '"' << nodes[i].id << "\" [label=\"" << nodes[i].id << ": " << nodeType << "\", supply=";
+			graph << nodes[i].supply[0] << ", demand=" << nodes[i].demand[0] << "]" << endl;
+		}
+		
+		
 		// display edges of current node
 		for (unsigned int k=0; k<nodes[i].edges.size(); k++){
 			if (displayResults){
@@ -278,7 +289,7 @@ int main() {
 			// save to file in GraphViz syntax
 			// nodes[i].id
 			if (saveGraphForm){
-				graph << '"' << nodes[i].id << "\"--\"" << nodes[i].edges[k].dest_id << "\"[label=\"" << " d = " << nodes[i].edges[k].distance << "\\n" << " t = " << nodes[i].edges[k].time << "\"]" << endl;
+				graph << '"' << nodes[i].id << "\"--\"" << nodes[i].edges[k].dest_id << "\"[label=\"" << " d = " << nodes[i].edges[k].distance << "\\n" << " t = " << nodes[i].edges[k].time << "\", distance=" << nodes[i].edges[k].distance << ", time=" << nodes[i].edges[k].time  << "]"<< endl;
 			}
 
 		}
