@@ -274,8 +274,7 @@ int main() {
 		}
 
 		if (saveGraphForm){
-			graph << '"' << nodes[i].id << "\" [label=\"" << nodes[i].id << ": " << nodeType << "\", supply=";
-			graph << nodes[i].supply[0] << ", demand=" << nodes[i].demand[0] << "]" << endl;
+			graph << "\"" << nodes[i].id << "\" [label=\"" << nodes[i].id << nodeType << "\", type=" << nodes[i].type <<  ", supply=" << nodes[i].supply[0] << ", demand=" << nodes[i].demand[0] << "]" << endl;
 		}
 		
 		
