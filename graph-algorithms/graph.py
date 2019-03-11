@@ -1,41 +1,55 @@
 import networkx as nx 
+import re
 
 def import_graph_from(graph, path=None):
-    with open(path) as inputfile:
-        for line in inputfile:
-            # a node
-            if(line[0] == "\"" and line[2] == "\"" and line[3] == " "):
-                # Get node parameters
-                # "0" [label="0WAREHOUSE", type=2, supply=6, demand=0]
-                str_params = line[4:-1].replace("["," ").replace("]", " ").strip().split(",")
-                
-                node_label = ""
-                node_type = -1
-                node_demand = -1
-                node_supply = -1
-                for param in str_params:
-                    param_key_value = param.strip().split("=")
-                    if param_key_value[0] == "label":
-                        node_label = param_key_value[1]
-                    elif param_key_value[0] == "type":
-                        node_type = int(param_key_value[1])
-                    elif param_key_value[0] == "supply":
-                        node_supply = int(param_key_value[1])
-                    elif param_key_value[0] == "demand":
-                        node_demand = int(param_key_value[1])
-                
-                # Get node id
-                node_id = int(line[1])
 
-                graph.add_node(node_id, label = node_label, type = node_type, supply = node_supply, demand=node_demand)
+    with open(path) as inputfile:
+        print("Reading .dot >>>>>>>>>>>>>")
+        for line in inputfile:
+            print(line)
             
-            # an edge
-            elif(line[0] == "\"" and line[2] == "\"" and line[5] == "\"" and line[7] == "\""):    
-                # Undirected
-                if(line[3] == "-" and line[4] == "-"):
-                    # get parameters
+            # --- A node
+            regex_node = re.findall("^\"[0-9]*\"\ ", line)
+            if regex_node:
+                # Get node id
+                node_id = int(regex_node[0].replace("\"", " ").strip())
+                # Get node parameters
+                regex_para_node = re.findall(r"\[.*\]", line)
+                if regex_para_node:
+                    # "0" [label="0WAREHOUSE", type=2, supply=6, demand=0]
+                    str_params = regex_para_node[0].replace("["," ").replace("]", " ").strip().split(",")
+    
+                    node_label = ""
+                    node_type = -1
+                    node_demand = -1
+                    node_supply = -1
+                    for param in str_params:
+                        param_key_value = param.strip().split("=")
+                        if param_key_value[0] == "label":
+                            node_label = param_key_value[1]
+                        elif param_key_value[0] == "type":
+                            node_type = int(param_key_value[1])
+                        elif param_key_value[0] == "supply":
+                            node_supply = int(param_key_value[1])
+                        elif param_key_value[0] == "demand":
+                            node_demand = int(param_key_value[1])
+
+                    graph.add_node(node_id, label = node_label, type = node_type, supply = node_supply, demand=node_demand)
+                else:
+                    raise Exception("Error while converting Node params")
+
+            # --- An edge
+            regex_edge = re.findall("^\"[0-9]*\"--\"[0-9]*", line)
+            if regex_edge:
+                # Get edge ids
+                ids = regex_edge[0].replace("\"", " ").strip().split(" -- ")
+                node_id1 = int(ids[0])
+                node_id2 = int(ids[1])
+                # Get edge parameters
+                regex_para_edge = re.findall(r"\[.*\]", line)
+                if regex_para_edge:
                     # "0"--"8"[label=" d = 435.738\n t = 112", distance=435.738, time=112]
-                    str_params = line[9:-1].replace("["," ").replace("]"," ").strip().split(",")
+                    str_params = regex_para_edge[0].replace("["," ").replace("]"," ").strip().split(",")
                     edge_label = ""
                     edge_dist = -1
                     edge_time = -1
@@ -51,13 +65,9 @@ def import_graph_from(graph, path=None):
                         elif param_key_value[0] == "time":
                             edge_time = float(param_key_value[1])
 
-                        node_id1 = int(line[1]) 
-                        node_id2 = int (line[6])
                         graph.add_edge(node_id1, node_id2, label=edge_label, distance=edge_dist, time=edge_time )
-                
-                # Directed
-                if(line[3] == "-" and line[4] == ">"):
-                    raise NotImplementedError
+                else:
+                    raise Exception("Error while converting Edge params")
     
 # print the graph nodes or edges
 def print_graph(graph, nodes_dict, out_nodes=True, out_edges=True):
@@ -145,10 +155,10 @@ def write_graph(graph):
     
     # # Nodes dict: keys are the int node_id: 0, value is a dict with nodes properties
     nodes_dict = get_all_nodes_dict(graph)
-    print("nodes_dict: ", nodes_dict)
+    print("nodes_dict: ", len(nodes_dict))
     # # Edges dict: keys are tuples with nodes ids: (0, 1), value is a dict with edge properties
     edges_dict = get_all_edges_dict(graph)
-    print("edges_dict: ", edges_dict)
+    print("edges_dict: ", len(edges_dict))
 
     warehouses_ids_list, warehouses_supplies_list = get_warehouses(graph)
     print("warehouses_ids_list: ", warehouses_ids_list)
@@ -161,6 +171,9 @@ def write_graph(graph):
 if __name__ == "__main__":
     graph = nx.Graph()
 
-    import_graph_from(graph=graph, path="../graph-generator/graph.txt")
+    import_graph_from(graph=graph, path="../graph-generator/graph1.txt")
     
+    print(list(graph.edges()))
+    print(list(graph.nodes()))
     write_graph(graph)
+
