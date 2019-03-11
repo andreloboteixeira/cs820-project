@@ -65,7 +65,8 @@ def import_graph_from(graph, path=None):
                         elif param_key_value[0] == "time":
                             edge_time = float(param_key_value[1])
 
-                        graph.add_edge(node_id1, node_id2, label=edge_label, distance=edge_dist, time=edge_time )
+                        # graph.add_edge(node_id1, node_id2, label=edge_label, distance=edge_dist, time=edge_time )
+                        graph.add_edge(node_id1, node_id2, label=edge_label, cost= edge_simple_cost(edge_dist,edge_time) )
                 else:
                     raise Exception("Error while converting Edge params")
     
