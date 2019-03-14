@@ -1,2 +1,6 @@
 /graph-generator/darwinian-networks
 \.vscode/
+
+*.zip
+*.txt
+*.png

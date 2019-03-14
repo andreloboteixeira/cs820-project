@@ -26,7 +26,7 @@ def import_graph_from(graph, path=None):
                     for param in str_params:
                         param_key_value = param.strip().split("=")
                         if param_key_value[0] == "label":
-                            node_label = param_key_value[1]
+                            node_label = param_key_value[1] + ": "
                         elif param_key_value[0] == "type":
                             node_type = int(param_key_value[1])
                         elif param_key_value[0] == "supply":
@@ -57,15 +57,14 @@ def import_graph_from(graph, path=None):
                     for param in str_params:
                         
                         param_key_value = param.strip().split("=")
-
                         if param_key_value[0] == "label":
-                            edge_label = param_key_value[1]
+                            edge_label = param_key_value[1] + param_key_value[2] + param_key_value[3]
                         elif param_key_value[0] == "distance":
                             edge_dist = float(param_key_value[1])
                         elif param_key_value[0] == "time":
                             edge_time = float(param_key_value[1])
 
-                        # graph.add_edge(node_id1, node_id2, label=edge_label, distance=edge_dist, time=edge_time )
+                        edge_label = "cost: {}".format(edge_simple_cost(edge_dist,edge_time))
                         graph.add_edge(node_id1, node_id2, label=edge_label, cost= edge_simple_cost(edge_dist,edge_time) )
                 else:
                     raise Exception("Error while converting Edge params")
