@@ -3,7 +3,7 @@
 
 */__pycache__
 *.zip
-*.txt
+.txt
 *.png
 graph-generator/a\.out
 

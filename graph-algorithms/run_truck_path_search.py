@@ -99,7 +99,7 @@ tot_dem = sum(store_demand_list)
 tot_sup = sum(warehouse_supply_list)
 
 iteration = 0
-while sum(store_demand_list) != 0 and sum(warehouse_supply_list) != 0:
+while sum(store_demand_list) != 0 and (truck_curr_load + sum(warehouse_supply_list)) != 0:
     path_to_go = []
     
     iteration +=1
@@ -168,7 +168,7 @@ while sum(store_demand_list) != 0 and sum(warehouse_supply_list) != 0:
     # go to the costless store
     elif truck_curr_load >= _load_threshold:
         if _log_alg:
-            save_path_algo.write("\n----- A) Decision: GOTO A STORE, as the load {} is above the threshold {}:\n".format(iteration, truck_curr_load, _load_threshold))
+            save_path_algo.write("\n----- A) Decision: GOTO A STORE, as the load {} is above the threshold {}:\n".format(truck_curr_load, _load_threshold))
         
         store_ids_list, store_demand_list = get_stores(graph)
 
