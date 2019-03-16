@@ -32,7 +32,7 @@ const float MAX_MAP_SIZE = 1000.0;
 // a custom function to generate pseudorandom floats between MIN and MAX
 // note: this can be easily type-casted like "(int)rnd_num(x,y)" to integers with float part truncated
 float rnd_num(float MIN, float MAX){
-	return MIN + (float)(dist(mt)) /( (float) (RAND_MAX/(MAX - MIN))); // pseurandom enough to work, lol
+	return MIN + (float)(dist(mt)) /( (float) (RAND_MAX/(MAX - MIN))); // pseurandom enough to work
 }
 
 // function to do a flip of the coin - yes or no? - one or zero will know
@@ -64,14 +64,14 @@ bool hasSpreadEdges; // flag to check if the node yet tried to edges
 vector<node> nodes;
 
 int main() {
-	cout << "Shipping roadmap graph generator v0.1a by Mikhail Shchukin." << endl;
+	cout << "Shipping roadmap graph generator by Mikhail Shchukin." << endl;
 
 	cout << "Please enter the number of nodes to generate: " ;
 	int max_nodes;
 	cin >> max_nodes;
 
-	if (max_nodes < 2) { // quick check if the user is a complete retard
-		cout << "Hey, you will then have a useless graph with no edges. You're fucked up!" << endl;
+	if (max_nodes < 2) { 
+		cout << "Hey, you will then have a useless graph with no edges." << endl;
 		return 1; // stop the program and go cry		
 	}
 
@@ -79,13 +79,13 @@ int main() {
 	int max_edges_per_node;
 	cin >> max_edges_per_node;
 
-	if (max_edges_per_node < 1) { // quick check if the user is a complete retard who doesn't know about graph theory
-		cout << "Hey, you will then have no edges at all. You're fucked up!" << endl;
+	if (max_edges_per_node < 1) {
+		cout << "Hey, you will then have no edges at all." << endl;
 		return 1; // stop the program and go cry		
 	}
 
-	if (max_edges_per_node > max_nodes - 1) { // quick check if the user is a complete retard who doesn't know about graph theory
-		cout << "Hey, you will then have too many edges. You're fucked up!" << endl;
+	if (max_edges_per_node > max_nodes - 1) {
+		cout << "Hey, you will then have too many edges." << endl;
 		return 1; // stop the program and go cry		
 	}
 
@@ -93,8 +93,8 @@ int main() {
 	int max_stores;
 	cin >> max_stores;
 
-	if (max_stores < 1) { // quick check if the user is a complete retard
-		cout << "Hey, will then have no stores at all. You're fucked up!" << endl;
+	if (max_stores < 1) { 
+		cout << "Hey, will then have no stores at all." << endl;
 		return 1; // stop the program and go cry		
 	}
 
@@ -102,21 +102,21 @@ int main() {
 	int max_warehouses;
 	cin >> max_warehouses;
 
-	if (max_warehouses < 1) { // quick check if the user is a complete retard
-		cout << "Hey, will then have no warehouses at all. You're fucked up!" << endl;
+	if (max_warehouses < 1) { 
+		cout << "Hey, will then have no warehouses at all." << endl;
 		return 1; // stop the program and go cry		
 	}
 
-	if (max_stores + max_warehouses > max_nodes) { // quick check if the user is a complete retard who cannot count
-		cout << "Hey, you want more warehouses/stores than the number of nodes to be generated. You're fucked up!" << endl;
+	if (max_stores + max_warehouses > max_nodes) {
+		cout << "Hey, you want more warehouses/stores than the number of nodes to be generated." << endl;
 		return 1; // stop the program and go cry
 	}
 
 	int good_types;
 	cout << "How many types of goods would you have?: " ;
 	cin >> good_types;
-	if (good_types < 1) { // quick check if the user is a complete retard
-		cout << "Hey, will then have no goods at all. You're fucked up!" << endl;
+	if (good_types < 1) { 
+		cout << "Hey, will then have no goods at all." << endl;
 		return 1; // stop the program and go cry		
 	}
 
@@ -201,7 +201,6 @@ int main() {
 	}
 
 	// once the nodes have been created, let's create the edges between them
-	// ACHTUNG - THIS AREA WILL BE UNDER ACTIVE DEVELOPMENT - EXPECT FUCKED-UP RESULTS STARTING FROM HERE
 	for (unsigned int i=0; i<nodes.size(); i++){
 		for (int e=0; e<max_edges_per_node; e++){
 			if (coinflip()) {
@@ -216,7 +215,6 @@ int main() {
 				// generate edge distance
 				e.distance = sqrtf(powf(nodes[i].x - nodes[e.dest_id].x, 2) + powf(nodes[i].y - nodes[e.dest_id].y, 2));
 				// generate edge time
-				// TODO: make these times reasonable - consider minutes, hours?
 				e.time = (int)rnd_num(30.0,120.0); // for now - let it be minutes of transition
 				nodes[i].edges.push_back(e); // record the edge to the node
 			}
@@ -233,7 +231,6 @@ int main() {
 			// generate edge distance
 			e.distance = sqrtf(powf(nodes[i].x - nodes[e.dest_id].x, 2) + powf(nodes[i].y - nodes[e.dest_id].y, 2));
 			// generate edge time
-			// TODO: make these times reasonable - consider minutes, hours?
 			e.time = (int)rnd_num(30.0,120.0); // for now - let it be minutes of transition
 			nodes[i].edges.push_back(e); // record the edge to the node
 		}
@@ -241,7 +238,6 @@ int main() {
 	}
 
 	// display the results and save them to file
-	// TODO: write results to text file while displaying them in the same loop.
 	ofstream graph;
 	graph.open("graph.txt");
 
@@ -274,7 +270,7 @@ int main() {
 		}
 
 		if (saveGraphForm){
-			graph << "\"" << nodes[i].id << "\" [label=\"" << nodes[i].id << nodeType << "\", type=" << nodes[i].type <<  ", supply=" << nodes[i].supply[0] << ", demand=" << nodes[i].demand[0] << "]" << endl;
+			graph << "\"" << nodes[i].id << "\" [label=\"" << nodes[i].id << " " << nodeType << "\", type=" << nodes[i].type <<  ", supply=" << nodes[i].supply[0] << ", demand=" << nodes[i].demand[0] << "]" << endl;
 		}
 		
 		
