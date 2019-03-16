@@ -1,7 +1,10 @@
 /graph-generator/darwinian-networks
 \.vscode/
 
+*/__pycache__
 *.zip
 *.txt
 *.png
 graph-generator/a\.out
+
+*.dot

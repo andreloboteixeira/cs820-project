@@ -21,7 +21,7 @@ On the other hand, if the current truck load is bellow the threshold, the decisi
 
 # Example to run:
 
->>> python run_truck_path_search --name goto_warehouse_or_store --input_dot_graph graph --truck_cap_max 6 --truck-start-node 0 --truck-initial-load 0 --load-threshold-factor 0.5
+>>> python run_truck_path_search.py --name goto_warehouse_or_store --input_dot_graph graph --truck_cap_max 6 --truck-start-node 0 --truck-initial-load 0 --load-threshold-factor 0.5 --log-alg
 
 """
 
@@ -57,7 +57,12 @@ parser.add_argument('--truck-initial-load', type=int, default=0,
 
 # --- Algorithms parameters
 parser.add_argument('--load-threshold-factor', type=float, default=0.5,
-                    help="For the greedy algorithm which decides to either go to a warehouse or a store, the load threshold factor.")           
+                    help="For the greedy algorithm which decides to either go to a warehouse or a store, the load threshold factor.")  
+
+# --- Logger parameters
+parser.add_argument('--log-alg', action='store_true',
+                    help="Print or not algorithm steps.")    
+
 args = parser.parse_args()
 _exp_name = args.name
 _truck_cap_max = args.truck_cap_max
@@ -66,12 +71,14 @@ _truck_initial_load = args.truck_initial_load
 _truck_start_node = args.truck_start_node
 _input_dot_graph = args.input_dot_graph
 _load_threshold = _load_threshold_factor* _truck_cap_max
+_log_alg = args.log_alg
 
 # EXPERIMENT SETUP
 timers = TicTac()
 # Start global timer
 timers.tic()
 
+# networkx graph object
 graph = nx.Graph()
 
 # --- Import graph from text file created by the generator
@@ -86,87 +93,157 @@ truck_curr_load = _truck_initial_load
 
 list_paths = []
 _, store_demand_list = get_stores(graph)
-while sum(store_demand_list) != 0:
-    path_to_go = []
+_, warehouse_supply_list = get_warehouses(graph)
+# total demand and supplies
+tot_dem = sum(store_demand_list)
+tot_sup = sum(warehouse_supply_list)
 
+iteration = 0
+while sum(store_demand_list) != 0 and sum(warehouse_supply_list) != 0:
+    path_to_go = []
+    
+    iteration +=1
+    if _log_alg:
+        save_path_algo.write("\n----------- Iteration {}: Truck at node {}\nCurrent STAUS:\nTotal Demand: {}/{}  Demand list: {}\nTotal Supply: {}/{}  Supply list: {}\nTruck Current Load: {}/{}\n\n".format(iteration, truck_curr_node, sum(store_demand_list), tot_dem, store_demand_list, sum(warehouse_supply_list), tot_sup, warehouse_supply_list, truck_curr_load, _truck_cap_max))
+    
     # go to the costless warehouse
     if truck_curr_load < _load_threshold:
-        save_path_algo.write("The load is bellow the threshold: GOTO A WAREHOUSE >>>>\n")
+        if _log_alg:
+            save_path_algo.write("\n----- A) Decision: GOTO A WAREHOUSE, as the load {} is bellow the threshold {}:\n".format(truck_curr_load, _load_threshold))
         
-        warehouses_ids_list, warehouses_supplies_list = get_warehouses(graph)
+        warehouses_ids_list, warehouse_supply_list = get_warehouses(graph)
         
-        save_path_algo.write("Searching the costless warehouse >>>\n")
+        if _log_alg:
+            save_path_algo.write("\n----- B) Searching the warehouse with the least path cost >>>\nSupplies list:{}\n".format(warehouse_supply_list))
+        
         costless_warehouse_id = None
         costless_warehouse_cost = INF
-        for curr_id in range(len(warehouses_ids_list)):
-            warehouse_id = warehouses_ids_list[curr_id]
-            warehouse_supply = warehouses_supplies_list[curr_id]
+        for ii in range(len(warehouses_ids_list)):
+            warehouse_id = warehouses_ids_list[ii]
+            warehouse_supply = warehouse_supply_list[ii]
             # print(warehouse_id, " ", warehouse_supply)
             
             if warehouse_supply > 0:
         
-                save_path_algo.write("--- current W id: {}\n".format(warehouse_id))
                 curr_path = nx.shortest_path(graph,source=truck_curr_node,target=warehouse_id, weight="cost")
-                save_path_algo.write("--- path to current W: {}\n".format(curr_path))
                 curr_path_length = nx.shortest_path_length(graph,source=truck_curr_node,target=warehouse_id, weight="cost")
-                save_path_algo.write("--- path cost: {}\n".format(curr_path_length))
+                if _log_alg: # log or not
+                    save_path_algo.write("--- current W id: {}\n".format(warehouse_id))
+                    save_path_algo.write("--- path to current W: {}\n".format(curr_path))
+                    save_path_algo.write("--- path cost: {}\n\n".format(curr_path_length))
                 if curr_path_length < costless_warehouse_cost:
                     costless_warehouse_cost = curr_path_length
                     costless_warehouse_id = warehouse_id
                     path_to_go = curr_path
-                save_path_algo.write("--- GOTO: costless warehouse to go: {}\n".format(costless_warehouse_id))
-        
-        # update suply of the store
+                # save_path_algo.write("--- GOTO: costless warehouse to go: {}\n".format(costless_warehouse_id))
+        if _log_alg:
+            save_path_algo.write("******Final Decision:\nGOTO warehouse {}\n".format(costless_warehouse_id))
+        # update supply of the store
         if not costless_warehouse_id == None:
-            # @TODO: update the supply
-            # Try to load the truck at its maximum capacity
-            graph.nodes[costless_warehouse_id]["supply"] = 0
-            truck_curr_load = 6
+            n_available_supplies = graph.nodes[costless_warehouse_id]["supply"]
+            # print("n_available_supplies: ", n_available_supplies)
+            # extra truck capacity, it will remain supplies
+            if (n_available_supplies + truck_curr_load) > _truck_cap_max:
+                truck_load_available = _truck_cap_max - truck_curr_load
+                # update warehouse supplies
+                graph.nodes[costless_warehouse_id]["supply"] -= truck_load_available
+                if _log_alg:
+                    save_path_algo.write("GET {} supplies from this warehouse\n\n".format(truck_load_available)) 
+                # truck at full capacity
+                truck_curr_load = _truck_cap_max
+            elif (n_available_supplies + truck_curr_load) <= _truck_cap_max:
+                remaining_supplies = _truck_cap_max - (n_available_supplies + truck_curr_load)
+                # update warehouse supplies
+                graph.nodes[costless_warehouse_id]["supply"] = 0
+                if _log_alg:
+                    save_path_algo.write("GET all supplies from this warehouse\n\n")
+                # load truck with all the warehouse supplies 
+                truck_curr_load = n_available_supplies + truck_curr_load
+            else:
+                raise Exception("Should not get into here.")
+            
             truck_curr_node = costless_warehouse_id
+            
             
     # go to the costless store
     elif truck_curr_load >= _load_threshold:
-        save_path_algo.write("The load is above the threshold: GOTO A STORE >>>>\n")
-
-        store_ids_list, store_demand_list = get_stores(graph)
+        if _log_alg:
+            save_path_algo.write("\n----- A) Decision: GOTO A STORE, as the load {} is above the threshold {}:\n".format(iteration, truck_curr_load, _load_threshold))
         
-        save_path_algo.write("Searching the costless store >>>\n")
+        store_ids_list, store_demand_list = get_stores(graph)
+
+        if _log_alg:
+            save_path_algo.write("\n----- B) Searching the store with least path cost >>>\nDemand list:{}\n".format(store_demand_list))
+
         costless_store_id = None
         costless_store_cost = INF
-        for curr_id in range(len(store_ids_list)):
-            store_id = store_ids_list[curr_id]
-            store_demand = store_demand_list[curr_id]
+        for ii in range(len(store_ids_list)):
+            store_id = store_ids_list[ii]
+            store_demand = store_demand_list[ii]
             # save_path_algo.write(store_id, " ", store_demand)
             
             # the store demand should be > 0
             if store_demand > 0:
 
-                save_path_algo.write("--- current S id: {}\n".format(store_id))
                 curr_path = nx.shortest_path(graph,source=truck_curr_node,target=store_id, weight="cost")
-                save_path_algo.write("--- path to current S: {}\n".format(curr_path))
                 curr_path_length = nx.shortest_path_length(graph,source=truck_curr_node,target=store_id, weight="cost")
-                save_path_algo.write("--- path cost: {}\n".format(curr_path_length))
+                if _log_alg: # log or not
+                    save_path_algo.write("--- current S id: {}\n".format(store_id))
+                    save_path_algo.write("--- path to current S: {}\n".format(curr_path))
+                    save_path_algo.write("--- path cost: {}\n\n".format(curr_path_length))
                 if curr_path_length < costless_store_cost:
                     costless_store_cost = curr_path_length
                     costless_store_id = store_id
                     path_to_go = curr_path
                     
-                save_path_algo.write("--- GOTO: costless store to go: {}\n".format(costless_store_id))
+                # save_path_algo.write("--- GOTO: costless store to go: {}\n".format(costless_store_id))
 
-
+        if _log_alg:
+            save_path_algo.write("******Final Decision:\nGOTO store {}\n".format(costless_store_id))
         # update demand of the store
         if not costless_store_id == None:
-            # @TODO: update the demand
-            graph.nodes[costless_store_id]["demand"] = 0
-            truck_curr_load = 0
+            n_available_demand = graph.nodes[costless_store_id]["demand"]
+
+            # truck has more than enough supplies for the store
+            if truck_curr_load >= n_available_demand:
+                # update store demand
+                graph.nodes[costless_store_id]["demand"] = 0
+                if _log_alg:
+                    save_path_algo.write("SUPPLY the entire demand from this store\n\n") 
+                # truck at full capacity
+                truck_curr_load -= n_available_demand
+            
+            # supply the maximum the truck has
+            elif truck_curr_load < n_available_demand:
+                # update store demand
+                graph.nodes[costless_store_id]["demand"] -= truck_curr_load
+                if _log_alg:
+                    save_path_algo.write("SUPPLY the store with the current truck load of {}\n\n".format(truck_curr_load)) 
+                # load truck with all the warehouse supplies 
+                truck_curr_load = 0
+            else:
+                raise Exception("Should not get into here.")
+            
             truck_curr_node = costless_store_id
 
     # if a path from current node to a next one was found
     if path_to_go:
         list_paths.append(path_to_go)
+    else:
+        raise Exception("Can't reach node!!")
     
     # get stores demand list to check if there is still demand
     _, store_demand_list = get_stores(graph)
+    # get warehouses supply list to check if there is still suplies left
+    _, warehouse_supply_list = get_warehouses(graph)
+
+save_path_algo.write("\n\n------------ Final State of global demand and supply:\n")
+_, store_demand_list = get_stores(graph)
+_, warehouse_supply_list = get_warehouses(graph)
+
+save_path_algo.write("Remainging demand: {}\n".format(sum(store_demand_list)))
+save_path_algo.write("Remainging supplies: {}\n".format(sum(warehouse_supply_list)))
+save_path_algo.write("\n\n------------ Final State of global demand and supply\n")
 
 exp_total_time = timers.tac()
 save_path_algo.write("\nTotal time of the experiment:{}\n\n".format(exp_total_time))
