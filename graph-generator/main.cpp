@@ -256,15 +256,15 @@ int main() {
 			switch(nodes[i].type){
 			case 0:
 				cout << " is a JOINT" << endl;
-				nodeType = "JOINT";
+				nodeType = "J";
 				break;
 			case 1:
 				cout << " is a STORE" << endl;
-				nodeType = "STORE";
+				nodeType = "S";
 				break;
 			case 2:
 				cout << " is a WAREHOUSE" << endl;
-				nodeType = "WAREHOUSE";
+				nodeType = "W";
 				break;
 			}		
 		}
