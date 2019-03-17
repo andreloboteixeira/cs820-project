@@ -3,8 +3,6 @@
 
 */__pycache__
 *.zip
-.txt
 *.png
 graph-generator/a\.out
 
-*.dot
