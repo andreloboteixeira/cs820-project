@@ -358,11 +358,12 @@
 % not capitalized unless they are the first or last word of the title.
 % Linebreaks \\ can be used within to get better formatting as desired.
 % Do not put math or special symbols in the title.
-\title{Goods transportation optimization\\ problem solving via routing algorithm}
-\author{Mikhail~Shchukin,~\IEEEmembership{CS~820~Graduate~Student,~University~of~Regina}
-        Aymen~Ben~Said,~\IEEEmembership{CS~820~Graduate~Student,~University~of~Regina,}
-        and~André~Lobo~Texeira,~\IEEEmembership{CS~820~Graduate~Student,~University~of~Regina}
-        }
+\title{Goods transportation problem solving \\ via routing algorithm}
+\author{Mikhail~Shchukin,~\IEEEmembership{CS~820~Graduate~Student,~University~of~Regina}\IEEEauthorrefmark{1}
+        Aymen~Ben~Said,~\IEEEmembership{CS~820~Graduate~Student,~University~of~Regina,}\IEEEauthorrefmark{2}
+        and~AndrĂ©~Lobo~Texeira,~\IEEEmembership{CS~820~Graduate~Student,~University~of~Regina}\IEEEauthorrefmark{3}
+        \\
+Email: \IEEEauthorrefmark{1}vladimmi@uregina.ca, \IEEEauthorrefmark{2}abb549@uregina.ca, \IEEEauthorrefmark{3}ADD ANDRE EMAIL}
 
 
 
@@ -392,7 +393,7 @@ of the routing algorithm is discussed and overall evaluation of the proposed pro
 
 % Note that keywords are not normally used for peerreview papers.
 \begin{IEEEkeywords}
-Algorithm, graph, report, artificial intelligence, logistics.
+Algorithm, graph, report, logistics.
 \end{IEEEkeywords}
 
 % For peer review papers, you can put extra information on the cover
@@ -417,13 +418,8 @@ IEEEtran.cls version 1.8b and later.
 % (should never be an issue)
 I wish you the best of success.
 
-Look, here is our graph:
-\begin{figure}[h]
-	\centering
-  	\includegraphics[width=0.5\textwidth]{img/img1.png}
-  	\caption{That is our graph!}
-  	\label{fig:img1}
-\end{figure}
+Look, here we refer to Fig. \ref{fig:img1}.
+
 
 \subsection{Subsection Heading Here}
 Subsection text here.
@@ -529,8 +525,9 @@ Subsubsection text here.
 % footnotes above bottom floats. This can be corrected via the
 % \fnbelowfloat command of the stfloats package.
 
+\section{Testing environment - graph generator}
 
-
+\section{The Routing Algorithm}
 
 \section{Conclusion}
 The conclusion goes here.
@@ -555,12 +552,21 @@ The conclusion goes here.
 
 
 \appendices
-\section{Transportation graph generator source code}
+\section{Figures}
+Figures go here
+\begin{figure}[h]
+	\centering
+  	\includegraphics[width=0.5\textwidth]{img/img1.png}
+  	\caption{That is our graph!}
+  	\label{fig:img1}
+\end{figure}
+
+\section{Source codes}
 Appendix one text goes here.
 
 % you can choose not to have a title for an appendix
 % if you want by leaving the argument blank
-\section{Optimization/routing algorithm source code}
+\section{Tools used}
 Appendix two text goes here.
 
 
