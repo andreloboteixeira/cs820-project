@@ -1,0 +1,779 @@
+
+----------- Iteration 1: Truck at node 0
+Current STAUS:
+Total Demand: 90/90  Demand list: [30, 30, 30]
+Total Supply: 100/100  Supply list: [50, 50]
+Truck Current Load: 0/6
+
+
+----- A) Decision: GOTO A WAREHOUSE, as the load 0 is bellow the threshold 3.0:
+
+----- B) Searching the warehouse with the least path cost >>>
+Supplies list:[50, 50]
+--- current W id: 1
+--- path to current W: [0, 10, 11, 1]
+--- path cost: 1548.145
+
+--- current W id: 11
+--- path to current W: [0, 10, 11]
+--- path cost: 846.153
+
+******Final Decision:
+GOTO warehouse 11
+GET 6 supplies from this warehouse
+
+
+----------- Iteration 2: Truck at node 11
+Current STAUS:
+Total Demand: 90/90  Demand list: [30, 30, 30]
+Total Supply: 94/100  Supply list: [50, 44]
+Truck Current Load: 6/6
+
+
+----- A) Decision: GOTO A STORE, as the load 6 is above the threshold 3.0:
+
+----- B) Searching the store with least path cost >>>
+Demand list:[30, 30, 30]
+--- current S id: 3
+--- path to current S: [11, 10, 3]
+--- path cost: 810.044
+
+--- current S id: 10
+--- path to current S: [11, 10]
+--- path cost: 529.947
+
+--- current S id: 9
+--- path to current S: [11, 1, 9]
+--- path cost: 1252.8809999999999
+
+******Final Decision:
+GOTO store 10
+SUPPLY the store with the current truck load of 6
+
+
+----------- Iteration 3: Truck at node 10
+Current STAUS:
+Total Demand: 84/90  Demand list: [30, 24, 30]
+Total Supply: 94/100  Supply list: [50, 44]
+Truck Current Load: 0/6
+
+
+----- A) Decision: GOTO A WAREHOUSE, as the load 0 is bellow the threshold 3.0:
+
+----- B) Searching the warehouse with the least path cost >>>
+Supplies list:[50, 44]
+--- current W id: 1
+--- path to current W: [10, 11, 1]
+--- path cost: 1231.9389999999999
+
+--- current W id: 11
+--- path to current W: [10, 11]
+--- path cost: 529.947
+
+******Final Decision:
+GOTO warehouse 11
+GET 6 supplies from this warehouse
+
+
+----------- Iteration 4: Truck at node 11
+Current STAUS:
+Total Demand: 84/90  Demand list: [30, 24, 30]
+Total Supply: 88/100  Supply list: [50, 38]
+Truck Current Load: 6/6
+
+
+----- A) Decision: GOTO A STORE, as the load 6 is above the threshold 3.0:
+
+----- B) Searching the store with least path cost >>>
+Demand list:[30, 24, 30]
+--- current S id: 3
+--- path to current S: [11, 10, 3]
+--- path cost: 810.044
+
+--- current S id: 10
+--- path to current S: [11, 10]
+--- path cost: 529.947
+
+--- current S id: 9
+--- path to current S: [11, 1, 9]
+--- path cost: 1252.8809999999999
+
+******Final Decision:
+GOTO store 10
+SUPPLY the store with the current truck load of 6
+
+
+----------- Iteration 5: Truck at node 10
+Current STAUS:
+Total Demand: 78/90  Demand list: [30, 18, 30]
+Total Supply: 88/100  Supply list: [50, 38]
+Truck Current Load: 0/6
+
+
+----- A) Decision: GOTO A WAREHOUSE, as the load 0 is bellow the threshold 3.0:
+
+----- B) Searching the warehouse with the least path cost >>>
+Supplies list:[50, 38]
+--- current W id: 1
+--- path to current W: [10, 11, 1]
+--- path cost: 1231.9389999999999
+
+--- current W id: 11
+--- path to current W: [10, 11]
+--- path cost: 529.947
+
+******Final Decision:
+GOTO warehouse 11
+GET 6 supplies from this warehouse
+
+
+----------- Iteration 6: Truck at node 11
+Current STAUS:
+Total Demand: 78/90  Demand list: [30, 18, 30]
+Total Supply: 82/100  Supply list: [50, 32]
+Truck Current Load: 6/6
+
+
+----- A) Decision: GOTO A STORE, as the load 6 is above the threshold 3.0:
+
+----- B) Searching the store with least path cost >>>
+Demand list:[30, 18, 30]
+--- current S id: 3
+--- path to current S: [11, 10, 3]
+--- path cost: 810.044
+
+--- current S id: 10
+--- path to current S: [11, 10]
+--- path cost: 529.947
+
+--- current S id: 9
+--- path to current S: [11, 1, 9]
+--- path cost: 1252.8809999999999
+
+******Final Decision:
+GOTO store 10
+SUPPLY the store with the current truck load of 6
+
+
+----------- Iteration 7: Truck at node 10
+Current STAUS:
+Total Demand: 72/90  Demand list: [30, 12, 30]
+Total Supply: 82/100  Supply list: [50, 32]
+Truck Current Load: 0/6
+
+
+----- A) Decision: GOTO A WAREHOUSE, as the load 0 is bellow the threshold 3.0:
+
+----- B) Searching the warehouse with the least path cost >>>
+Supplies list:[50, 32]
+--- current W id: 1
+--- path to current W: [10, 11, 1]
+--- path cost: 1231.9389999999999
+
+--- current W id: 11
+--- path to current W: [10, 11]
+--- path cost: 529.947
+
+******Final Decision:
+GOTO warehouse 11
+GET 6 supplies from this warehouse
+
+
+----------- Iteration 8: Truck at node 11
+Current STAUS:
+Total Demand: 72/90  Demand list: [30, 12, 30]
+Total Supply: 76/100  Supply list: [50, 26]
+Truck Current Load: 6/6
+
+
+----- A) Decision: GOTO A STORE, as the load 6 is above the threshold 3.0:
+
+----- B) Searching the store with least path cost >>>
+Demand list:[30, 12, 30]
+--- current S id: 3
+--- path to current S: [11, 10, 3]
+--- path cost: 810.044
+
+--- current S id: 10
+--- path to current S: [11, 10]
+--- path cost: 529.947
+
+--- current S id: 9
+--- path to current S: [11, 1, 9]
+--- path cost: 1252.8809999999999
+
+******Final Decision:
+GOTO store 10
+SUPPLY the store with the current truck load of 6
+
+
+----------- Iteration 9: Truck at node 10
+Current STAUS:
+Total Demand: 66/90  Demand list: [30, 6, 30]
+Total Supply: 76/100  Supply list: [50, 26]
+Truck Current Load: 0/6
+
+
+----- A) Decision: GOTO A WAREHOUSE, as the load 0 is bellow the threshold 3.0:
+
+----- B) Searching the warehouse with the least path cost >>>
+Supplies list:[50, 26]
+--- current W id: 1
+--- path to current W: [10, 11, 1]
+--- path cost: 1231.9389999999999
+
+--- current W id: 11
+--- path to current W: [10, 11]
+--- path cost: 529.947
+
+******Final Decision:
+GOTO warehouse 11
+GET 6 supplies from this warehouse
+
+
+----------- Iteration 10: Truck at node 11
+Current STAUS:
+Total Demand: 66/90  Demand list: [30, 6, 30]
+Total Supply: 70/100  Supply list: [50, 20]
+Truck Current Load: 6/6
+
+
+----- A) Decision: GOTO A STORE, as the load 6 is above the threshold 3.0:
+
+----- B) Searching the store with least path cost >>>
+Demand list:[30, 6, 30]
+--- current S id: 3
+--- path to current S: [11, 10, 3]
+--- path cost: 810.044
+
+--- current S id: 10
+--- path to current S: [11, 10]
+--- path cost: 529.947
+
+--- current S id: 9
+--- path to current S: [11, 1, 9]
+--- path cost: 1252.8809999999999
+
+******Final Decision:
+GOTO store 10
+SUPPLY the entire demand from this store
+
+
+----------- Iteration 11: Truck at node 10
+Current STAUS:
+Total Demand: 60/90  Demand list: [30, 0, 30]
+Total Supply: 70/100  Supply list: [50, 20]
+Truck Current Load: 0/6
+
+
+----- A) Decision: GOTO A WAREHOUSE, as the load 0 is bellow the threshold 3.0:
+
+----- B) Searching the warehouse with the least path cost >>>
+Supplies list:[50, 20]
+--- current W id: 1
+--- path to current W: [10, 11, 1]
+--- path cost: 1231.9389999999999
+
+--- current W id: 11
+--- path to current W: [10, 11]
+--- path cost: 529.947
+
+******Final Decision:
+GOTO warehouse 11
+GET 6 supplies from this warehouse
+
+
+----------- Iteration 12: Truck at node 11
+Current STAUS:
+Total Demand: 60/90  Demand list: [30, 0, 30]
+Total Supply: 64/100  Supply list: [50, 14]
+Truck Current Load: 6/6
+
+
+----- A) Decision: GOTO A STORE, as the load 6 is above the threshold 3.0:
+
+----- B) Searching the store with least path cost >>>
+Demand list:[30, 0, 30]
+--- current S id: 3
+--- path to current S: [11, 10, 3]
+--- path cost: 810.044
+
+--- current S id: 9
+--- path to current S: [11, 1, 9]
+--- path cost: 1252.8809999999999
+
+******Final Decision:
+GOTO store 3
+SUPPLY the store with the current truck load of 6
+
+
+----------- Iteration 13: Truck at node 3
+Current STAUS:
+Total Demand: 54/90  Demand list: [24, 0, 30]
+Total Supply: 64/100  Supply list: [50, 14]
+Truck Current Load: 0/6
+
+
+----- A) Decision: GOTO A WAREHOUSE, as the load 0 is bellow the threshold 3.0:
+
+----- B) Searching the warehouse with the least path cost >>>
+Supplies list:[50, 14]
+--- current W id: 1
+--- path to current W: [3, 10, 11, 1]
+--- path cost: 1512.036
+
+--- current W id: 11
+--- path to current W: [3, 10, 11]
+--- path cost: 810.044
+
+******Final Decision:
+GOTO warehouse 11
+GET 6 supplies from this warehouse
+
+
+----------- Iteration 14: Truck at node 11
+Current STAUS:
+Total Demand: 54/90  Demand list: [24, 0, 30]
+Total Supply: 58/100  Supply list: [50, 8]
+Truck Current Load: 6/6
+
+
+----- A) Decision: GOTO A STORE, as the load 6 is above the threshold 3.0:
+
+----- B) Searching the store with least path cost >>>
+Demand list:[24, 0, 30]
+--- current S id: 3
+--- path to current S: [11, 10, 3]
+--- path cost: 810.044
+
+--- current S id: 9
+--- path to current S: [11, 1, 9]
+--- path cost: 1252.8809999999999
+
+******Final Decision:
+GOTO store 3
+SUPPLY the store with the current truck load of 6
+
+
+----------- Iteration 15: Truck at node 3
+Current STAUS:
+Total Demand: 48/90  Demand list: [18, 0, 30]
+Total Supply: 58/100  Supply list: [50, 8]
+Truck Current Load: 0/6
+
+
+----- A) Decision: GOTO A WAREHOUSE, as the load 0 is bellow the threshold 3.0:
+
+----- B) Searching the warehouse with the least path cost >>>
+Supplies list:[50, 8]
+--- current W id: 1
+--- path to current W: [3, 10, 11, 1]
+--- path cost: 1512.036
+
+--- current W id: 11
+--- path to current W: [3, 10, 11]
+--- path cost: 810.044
+
+******Final Decision:
+GOTO warehouse 11
+GET 6 supplies from this warehouse
+
+
+----------- Iteration 16: Truck at node 11
+Current STAUS:
+Total Demand: 48/90  Demand list: [18, 0, 30]
+Total Supply: 52/100  Supply list: [50, 2]
+Truck Current Load: 6/6
+
+
+----- A) Decision: GOTO A STORE, as the load 6 is above the threshold 3.0:
+
+----- B) Searching the store with least path cost >>>
+Demand list:[18, 0, 30]
+--- current S id: 3
+--- path to current S: [11, 10, 3]
+--- path cost: 810.044
+
+--- current S id: 9
+--- path to current S: [11, 1, 9]
+--- path cost: 1252.8809999999999
+
+******Final Decision:
+GOTO store 3
+SUPPLY the store with the current truck load of 6
+
+
+----------- Iteration 17: Truck at node 3
+Current STAUS:
+Total Demand: 42/90  Demand list: [12, 0, 30]
+Total Supply: 52/100  Supply list: [50, 2]
+Truck Current Load: 0/6
+
+
+----- A) Decision: GOTO A WAREHOUSE, as the load 0 is bellow the threshold 3.0:
+
+----- B) Searching the warehouse with the least path cost >>>
+Supplies list:[50, 2]
+--- current W id: 1
+--- path to current W: [3, 10, 11, 1]
+--- path cost: 1512.036
+
+--- current W id: 11
+--- path to current W: [3, 10, 11]
+--- path cost: 810.044
+
+******Final Decision:
+GOTO warehouse 11
+GET all supplies from this warehouse
+
+
+----------- Iteration 18: Truck at node 11
+Current STAUS:
+Total Demand: 42/90  Demand list: [12, 0, 30]
+Total Supply: 50/100  Supply list: [50, 0]
+Truck Current Load: 2/6
+
+
+----- A) Decision: GOTO A WAREHOUSE, as the load 2 is bellow the threshold 3.0:
+
+----- B) Searching the warehouse with the least path cost >>>
+Supplies list:[50, 0]
+--- current W id: 1
+--- path to current W: [11, 1]
+--- path cost: 701.992
+
+******Final Decision:
+GOTO warehouse 1
+GET 4 supplies from this warehouse
+
+
+----------- Iteration 19: Truck at node 1
+Current STAUS:
+Total Demand: 42/90  Demand list: [12, 0, 30]
+Total Supply: 46/100  Supply list: [46, 0]
+Truck Current Load: 6/6
+
+
+----- A) Decision: GOTO A STORE, as the load 6 is above the threshold 3.0:
+
+----- B) Searching the store with least path cost >>>
+Demand list:[12, 0, 30]
+--- current S id: 3
+--- path to current S: [1, 11, 10, 3]
+--- path cost: 1512.0359999999998
+
+--- current S id: 9
+--- path to current S: [1, 9]
+--- path cost: 550.889
+
+******Final Decision:
+GOTO store 9
+SUPPLY the store with the current truck load of 6
+
+
+----------- Iteration 20: Truck at node 9
+Current STAUS:
+Total Demand: 36/90  Demand list: [12, 0, 24]
+Total Supply: 46/100  Supply list: [46, 0]
+Truck Current Load: 0/6
+
+
+----- A) Decision: GOTO A WAREHOUSE, as the load 0 is bellow the threshold 3.0:
+
+----- B) Searching the warehouse with the least path cost >>>
+Supplies list:[46, 0]
+--- current W id: 1
+--- path to current W: [9, 1]
+--- path cost: 550.889
+
+******Final Decision:
+GOTO warehouse 1
+GET 6 supplies from this warehouse
+
+
+----------- Iteration 21: Truck at node 1
+Current STAUS:
+Total Demand: 36/90  Demand list: [12, 0, 24]
+Total Supply: 40/100  Supply list: [40, 0]
+Truck Current Load: 6/6
+
+
+----- A) Decision: GOTO A STORE, as the load 6 is above the threshold 3.0:
+
+----- B) Searching the store with least path cost >>>
+Demand list:[12, 0, 24]
+--- current S id: 3
+--- path to current S: [1, 11, 10, 3]
+--- path cost: 1512.0359999999998
+
+--- current S id: 9
+--- path to current S: [1, 9]
+--- path cost: 550.889
+
+******Final Decision:
+GOTO store 9
+SUPPLY the store with the current truck load of 6
+
+
+----------- Iteration 22: Truck at node 9
+Current STAUS:
+Total Demand: 30/90  Demand list: [12, 0, 18]
+Total Supply: 40/100  Supply list: [40, 0]
+Truck Current Load: 0/6
+
+
+----- A) Decision: GOTO A WAREHOUSE, as the load 0 is bellow the threshold 3.0:
+
+----- B) Searching the warehouse with the least path cost >>>
+Supplies list:[40, 0]
+--- current W id: 1
+--- path to current W: [9, 1]
+--- path cost: 550.889
+
+******Final Decision:
+GOTO warehouse 1
+GET 6 supplies from this warehouse
+
+
+----------- Iteration 23: Truck at node 1
+Current STAUS:
+Total Demand: 30/90  Demand list: [12, 0, 18]
+Total Supply: 34/100  Supply list: [34, 0]
+Truck Current Load: 6/6
+
+
+----- A) Decision: GOTO A STORE, as the load 6 is above the threshold 3.0:
+
+----- B) Searching the store with least path cost >>>
+Demand list:[12, 0, 18]
+--- current S id: 3
+--- path to current S: [1, 11, 10, 3]
+--- path cost: 1512.0359999999998
+
+--- current S id: 9
+--- path to current S: [1, 9]
+--- path cost: 550.889
+
+******Final Decision:
+GOTO store 9
+SUPPLY the store with the current truck load of 6
+
+
+----------- Iteration 24: Truck at node 9
+Current STAUS:
+Total Demand: 24/90  Demand list: [12, 0, 12]
+Total Supply: 34/100  Supply list: [34, 0]
+Truck Current Load: 0/6
+
+
+----- A) Decision: GOTO A WAREHOUSE, as the load 0 is bellow the threshold 3.0:
+
+----- B) Searching the warehouse with the least path cost >>>
+Supplies list:[34, 0]
+--- current W id: 1
+--- path to current W: [9, 1]
+--- path cost: 550.889
+
+******Final Decision:
+GOTO warehouse 1
+GET 6 supplies from this warehouse
+
+
+----------- Iteration 25: Truck at node 1
+Current STAUS:
+Total Demand: 24/90  Demand list: [12, 0, 12]
+Total Supply: 28/100  Supply list: [28, 0]
+Truck Current Load: 6/6
+
+
+----- A) Decision: GOTO A STORE, as the load 6 is above the threshold 3.0:
+
+----- B) Searching the store with least path cost >>>
+Demand list:[12, 0, 12]
+--- current S id: 3
+--- path to current S: [1, 11, 10, 3]
+--- path cost: 1512.0359999999998
+
+--- current S id: 9
+--- path to current S: [1, 9]
+--- path cost: 550.889
+
+******Final Decision:
+GOTO store 9
+SUPPLY the store with the current truck load of 6
+
+
+----------- Iteration 26: Truck at node 9
+Current STAUS:
+Total Demand: 18/90  Demand list: [12, 0, 6]
+Total Supply: 28/100  Supply list: [28, 0]
+Truck Current Load: 0/6
+
+
+----- A) Decision: GOTO A WAREHOUSE, as the load 0 is bellow the threshold 3.0:
+
+----- B) Searching the warehouse with the least path cost >>>
+Supplies list:[28, 0]
+--- current W id: 1
+--- path to current W: [9, 1]
+--- path cost: 550.889
+
+******Final Decision:
+GOTO warehouse 1
+GET 6 supplies from this warehouse
+
+
+----------- Iteration 27: Truck at node 1
+Current STAUS:
+Total Demand: 18/90  Demand list: [12, 0, 6]
+Total Supply: 22/100  Supply list: [22, 0]
+Truck Current Load: 6/6
+
+
+----- A) Decision: GOTO A STORE, as the load 6 is above the threshold 3.0:
+
+----- B) Searching the store with least path cost >>>
+Demand list:[12, 0, 6]
+--- current S id: 3
+--- path to current S: [1, 11, 10, 3]
+--- path cost: 1512.0359999999998
+
+--- current S id: 9
+--- path to current S: [1, 9]
+--- path cost: 550.889
+
+******Final Decision:
+GOTO store 9
+SUPPLY the entire demand from this store
+
+
+----------- Iteration 28: Truck at node 9
+Current STAUS:
+Total Demand: 12/90  Demand list: [12, 0, 0]
+Total Supply: 22/100  Supply list: [22, 0]
+Truck Current Load: 0/6
+
+
+----- A) Decision: GOTO A WAREHOUSE, as the load 0 is bellow the threshold 3.0:
+
+----- B) Searching the warehouse with the least path cost >>>
+Supplies list:[22, 0]
+--- current W id: 1
+--- path to current W: [9, 1]
+--- path cost: 550.889
+
+******Final Decision:
+GOTO warehouse 1
+GET 6 supplies from this warehouse
+
+
+----------- Iteration 29: Truck at node 1
+Current STAUS:
+Total Demand: 12/90  Demand list: [12, 0, 0]
+Total Supply: 16/100  Supply list: [16, 0]
+Truck Current Load: 6/6
+
+
+----- A) Decision: GOTO A STORE, as the load 6 is above the threshold 3.0:
+
+----- B) Searching the store with least path cost >>>
+Demand list:[12, 0, 0]
+--- current S id: 3
+--- path to current S: [1, 11, 10, 3]
+--- path cost: 1512.0359999999998
+
+******Final Decision:
+GOTO store 3
+SUPPLY the store with the current truck load of 6
+
+
+----------- Iteration 30: Truck at node 3
+Current STAUS:
+Total Demand: 6/90  Demand list: [6, 0, 0]
+Total Supply: 16/100  Supply list: [16, 0]
+Truck Current Load: 0/6
+
+
+----- A) Decision: GOTO A WAREHOUSE, as the load 0 is bellow the threshold 3.0:
+
+----- B) Searching the warehouse with the least path cost >>>
+Supplies list:[16, 0]
+--- current W id: 1
+--- path to current W: [3, 10, 11, 1]
+--- path cost: 1512.036
+
+******Final Decision:
+GOTO warehouse 1
+GET 6 supplies from this warehouse
+
+
+----------- Iteration 31: Truck at node 1
+Current STAUS:
+Total Demand: 6/90  Demand list: [6, 0, 0]
+Total Supply: 10/100  Supply list: [10, 0]
+Truck Current Load: 6/6
+
+
+----- A) Decision: GOTO A STORE, as the load 6 is above the threshold 3.0:
+
+----- B) Searching the store with least path cost >>>
+Demand list:[6, 0, 0]
+--- current S id: 3
+--- path to current S: [1, 11, 10, 3]
+--- path cost: 1512.0359999999998
+
+******Final Decision:
+GOTO store 3
+SUPPLY the entire demand from this store
+
+
+
+------------ Final State of global demand and supply:
+Remainging demand: 0
+Remainging supplies: 10
+
+
+------------ Final State of global demand and supply
+
+Total time of the experiment:0.011438748988439329
+
+
+Truck started at node (0) with initial load of (0), and capacity of (6)
+
+The algorithm used a threshold factor of (0.5)
+
+The imported graph file name is 'graph'
+
+The overall cost of the truck's path is: 21752.876999999993
+The list of paths is: 
+[0, 10, 11]
+[11, 10]
+[10, 11]
+[11, 10]
+[10, 11]
+[11, 10]
+[10, 11]
+[11, 10]
+[10, 11]
+[11, 10]
+[10, 11]
+[11, 10, 3]
+[3, 10, 11]
+[11, 10, 3]
+[3, 10, 11]
+[11, 10, 3]
+[3, 10, 11]
+[11, 1]
+[1, 9]
+[9, 1]
+[1, 9]
+[9, 1]
+[1, 9]
+[9, 1]
+[1, 9]
+[9, 1]
+[1, 9]
+[9, 1]
+[1, 11, 10, 3]
+[3, 10, 11, 1]
+[1, 11, 10, 3]
