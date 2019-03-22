@@ -152,6 +152,7 @@
 
 \usepackage{graphicx}
 \usepackage{placeins}
+\usepackage{mathtools}
 \graphicspath{ {./img/} }
 
 
@@ -361,9 +362,9 @@
 \title{Goods transportation problem solving \\ via routing algorithm}
 \author{Mikhail~Shchukin,~\IEEEmembership{CS~820~Graduate~Student,~University~of~Regina}\IEEEauthorrefmark{1}
         Aymen~Ben~Said,~\IEEEmembership{CS~820~Graduate~Student,~University~of~Regina,}\IEEEauthorrefmark{2}
-        and~AndrĂ©~Lobo~Texeira,~\IEEEmembership{CS~820~Graduate~Student,~University~of~Regina}\IEEEauthorrefmark{3}
+        and~André~Lobo~Teixeira,~\IEEEmembership{CS~820~Graduate~Student,~University~of~Regina}\IEEEauthorrefmark{3}
         \\
-Email: \IEEEauthorrefmark{1}vladimmi@uregina.ca, \IEEEauthorrefmark{2}abb549@uregina.ca, \IEEEauthorrefmark{3}ADD ANDRE EMAIL}
+Email: \IEEEauthorrefmark{1}vladimmi@uregina.ca, \IEEEauthorrefmark{2}abb549@uregina.ca, \IEEEauthorrefmark{3}teixeira@cs.uregina.ca}
 
 
 
@@ -384,10 +385,10 @@ Email: \IEEEauthorrefmark{1}vladimmi@uregina.ca, \IEEEauthorrefmark{2}abb549@ure
 % As a general rule, do not put math, special symbols or citations
 % in the abstract or keywords.
 \begin{abstract}
-This project report outlines the ideas behind developing a graph-based heuristic-driven courrier routing algorithm 
+This project report outlines the ideas behind developing a graph-based heuristic-driven routing algorithm 
 designed for a particular instance of a goods transportation problem with a single good type.
 The proposed algorithm solves the optimization problem of satisfying the demand of goods on a given undirected
-transportation graph with minimizing the estimated cost for each traversed segment of the courrier path. The operation
+transportation graph with minimizing the estimated cost for each traversed segment of the delivery path. The operation
 of the routing algorithm is discussed and overall evaluation of the proposed problem solving technique is given.
 \end{abstract}
 
@@ -411,25 +412,61 @@ Algorithm, graph, report, logistics.
 \section{Introduction}
 % The very first letter is a 2 line initial drop letter followed
 % by the rest of the first word in caps.
-\IEEEPARstart{T}{his} demo file is intended to serve as a ``starter file''
-for IEEE journal papers produced under \LaTeX\ using
-IEEEtran.cls version 1.8b and later. 
-% You must have at least 2 lines in the paragraph with the drop letter
-% (should never be an issue)
-I wish you the best of success.
+\IEEEPARstart{T}{he} transportation problem is one of the well-known and hot topics both in mathematics and economics.
+It was first conceptualized by Gaspard Monge back in 1781 [1]. Since then, it was analyzed with various approaches, including linear programming and graph-based algorithms. In this project, a graph-based interpretation of the problem is used. This project strives to deal with this problem using graph theory approach and a particular decision-making algorithm in an attempt to acquire an acceptable solution, if it exists, or give partial solution otherwise.
 
-Look, here we refer to Fig. \ref{fig:img1}.
+From our point of view, the transportation problem can be represented by a graph with nodes of 3 types: \textit{store}, \textit{warehouse} and a \textit{joint}. The edges between nodes represent roads to traverse with associated \textit{distance} and \textit{time}. The stores and warehouses have a certain associated amount of \textit{demand} and \textit{supply} of goods respectively. Joints act solely as transfer points (major cities, towns, etc.). For simplicity, all goods are assumed to be of the \textit{single type}. The problem is finding the way to provide the stores with goods available in the warehouses, \textit{maximizing} the amount of delivered goods, while \textit{minimizing} the transportation costs. It is assumed that the shipping is being done by a \textit{single agent}, a truck with a certain \textit{maximum carry capacity}, that is traversing a certain path while loading and unloading goods where needed.
+
+In this project, we provide an algorithm that takes a pre-generated transportation problem graph with the described characteristics and returns the following key elements of the proposed solution:
+\begin{itemize}
+	\item{Truck path with shipping and restocking segments}
+	\item{Algorithm log with the following details:}
+		\begin{itemize}
+			\item{shipping and restocking segments explained}
+			\item{routing decisions made for next segment (if applicable)}
+			\item{decision cost (heuristic value)}
+			\item{Remaining total amount of demand or supply at the termination of algorithm}
+		\end{itemize}
+	\item{Total runtime of the algorithm}
+\end{itemize}
+
+In the following sections we describe the testing environment for such algorithm, the mode of operation of such algorithm and the experimental results.
 
 
-\subsection{Subsection Heading Here}
-Subsection text here.
+\section{Testing environment - graph generator}
+
+First of all, in order to provide a capability of reproducing the experimental results of using the suggested algorithm, it is important to have a testing environment that can produce a set of various transportation problem instances (graphs) of a varying scale to serve as an input to the solving algorithm. The suggested testing environment attempts to pseudorandomly generate a transportation problem graph instance on each run. This allows to create a wide variety of sample cases that are applicable to the real-life instances of goods transportation problem.
+
+The graph generator requires the following parameters to operate with:
+\begin{itemize}
+	\item{Total number of nodes to generate}
+	\item{Maximum number of edges to spawn per node}
+	\item{Total number of stores to generate}
+	\item{Total number of warehouses to generate}
+	\item{Types of goods to generate (in scope of this project, this defaults to 1)}
+	\item{Total supply and total demand per each good type}
+\end{itemize}
+
+Given these parameters, the graph generator proceeds to create a requested number of nodes. Each node is created as a joint by default. Then, the algorithm pseudorandomly decides which nodes are converted into stores and warehouses. To keep the graph realistic, each node receives pseudorandomly assigned coordinates of {X,Y}, where X,Y \(\in\) [0, MAX\_MAP\_SIZE], where MAX\_MAP\_SIZE corresponds to the scale of the square space where the transportation problem is defined, it defaults to 1000. Originally, it is assumed that the units of map scale are expressed in \textit{kilometers}.  The generator then distributes goods to be supplied one by one between each warehouse until all supplies are allocated. Similarly, each store keeps incrementing the amount of demanded goods one by one until the demand is equally distributed among all stores. Equal distribution of supply and demand among stores and warehouses is assumed to avoid degenerate cases to happen (i.e. most goods are concentrated in a warehouse too close to the stores, one store demands much more goods than the others, etc.).
+
+After the node generation is done, the algorithm spreads the required amount of edges. Each time an edge is to be created, there is a 50\% chance for that to happen. To avoid disconnected graphs, the algorithm forces at least one edge to be spread. The destination node is picked pseudorandomly among the rest of the generated nodes. When the edge is created, the {X,Y} coordinates of the source and destination are used to obtain the \textit{distance between nodes}. Then, an \textit{average assumed velocity} is picked within the range of [40,100]. These bounds are assuming that the velocity is expressed in \textit{kilometers per hour}, where lower bound corresponds to speed limits of bigger cities and upper bound resembles the highways. Based on the average assumed velocity of the edge, the time is then calculated as 
+\begin{equation*}
+time\_in\_minutes = (distance\_between\_nodes / assumed\_average\_velocity) \times 60
+\end{equation*}
+with floating point of it truncated. The time and distance are the two key parameters that affect the later decision-making, so they are kept in the graph as the background information.
+
+When edges between nodes are created, the graph generator produces a simple text file, that has the problem-related information associated with nodes and edges. Notably, the syntax for such text file is specifically designed to follow the syntax of WebGraphViz, the online graph visualization tool that can produce and display the graph, based on the plain text graph description with all embedded information as a picture[2]. A particular example of such visualization can be seen on Fig. \ref{fig:img1}. The source file for that graph is available in Appendix \ref{sc} of this report.
+
+This testing environment combines the commodity of reproducable results, configurable problem scaling and the power of visualization through external tools. In the following sections, we refer to Fig. \ref{fig:img1} as a particular case of using this testing environment.
 
 % needed in second column of first page if using \IEEEpubid
 %\IEEEpubidadjcol
 
-\subsubsection{Subsubsection Heading Here}
-Subsubsection text here.
+%\subsection{Subsection Heading Here}
+%Subsection text here.
 
+%\subsubsection{Subsubsection Heading Here}
+%Subsubsection text here.
 
 % An example of a floating figure using the graphicx package.
 % Note that \label must occur AFTER (or within) \caption.
@@ -525,12 +562,37 @@ Subsubsection text here.
 % footnotes above bottom floats. This can be corrected via the
 % \fnbelowfloat command of the stfloats package.
 
-\section{Testing environment - graph generator}
+
+
+
+
 
 \section{The Routing Algorithm}
+In order to function, our algorithm needs to get some inputs from the graph generator which will guide it through making decisions. The algorithm treats each node as a joint node with some differences in two parameters, the first one represents the supply and the second represents the demand. For warehouse nodes, the demand is always set to zero; contrarily to stores, the supply is set to zero, and finally for joints, both supply and demand are set to zeros. 
+\\ Another important factor for decision making is the cost of paths which consists of the summation of the distance and the time spent to go from node to node. 
+For the reason of simplicity, the truck will initially start at node 0 which is the very first generated node and goes from there. The truck also has some configurations to be considered which are: the initial load of supply which we assumed to be zero at the beginning, as well as the maximum capacity of loaded goods. Moreover, we assigned a threshold value for the truck that serves as a cut off point to guide the truck either to go to a warehouse for loading or to go to a store for unloading goods.
+\\The truck keeps going back and forth between the stores and the warehouses until either the warehouses run off of supply or the stores stops asking for goods.
+\\The initial process of the algorithm will go as follow:
+\\
+\begin{itemize}
+    \item{If the initial position of the truck is at a warehouse node with a \textless  \ capacity to the threshold : the truck will go to the nearest warehouse which is the current node and get loaded.}
+    \item{If the initial position of the truck is at a joint node with a \textless \  capacity to the threshold: the truck will go to the nearest warehouse to get loaded with goods.}
+    \item{If the initial position of the truck  is at a store node with a \textless  \ capacity to the threshold: the truck will go to the nearest warehouse to get loaded with goods.}
+   \item{If the initial state of the truck is at a warehouse node with a \textgreater=  capacity to the threshold: the truck will go to the nearest store to unload goods.}
+   \item{If the initial state of the truck is at a joint node with a \textgreater =  capacity to the threshold: the truck will go to the nearest store to unload goods.}
+   \item{If the initial state of the truck is at a store node with a \textgreater =  capacity to the threshold: the truck will unload goods at the current node.}  
+\end{itemize}
+
+
+
+
 
 \section{Conclusion}
-The conclusion goes here.
+
+- helps in decision making of trucks capacity, by looking to the overal cost of the solution path given a truck capacity
+- the algorithm give a solution which tries to fulfil the entire demand and minimize the overal path cost
+
+Our algorithm does a good job in dealing with the goods transportation problem because it helps 
 
 
 
@@ -557,11 +619,12 @@ Figures go here
 \begin{figure}[h]
 	\centering
   	\includegraphics[width=0.5\textwidth]{img/img1.png}
-  	\caption{That is our graph!}
+  	\caption{That is our graph!}	
   	\label{fig:img1}
 \end{figure}
 
 \section{Source codes}
+\label{sc}
 Appendix one text goes here.
 
 % you can choose not to have a title for an appendix
