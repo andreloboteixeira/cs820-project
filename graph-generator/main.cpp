@@ -215,7 +215,8 @@ int main() {
 				// generate edge distance
 				e.distance = sqrtf(powf(nodes[i].x - nodes[e.dest_id].x, 2) + powf(nodes[i].y - nodes[e.dest_id].y, 2));
 				// generate edge time
-				e.time = (int)rnd_num(30.0,120.0); // for now - let it be minutes of transition
+				float assumed_velocity = rnd_num(40.0,100.0); // pick the assumed average velocity (km/h) allowed for this edge
+				e.time = (int)((e.distance / assumed_velocity) * 60); // for now - let it be minutes of transition
 				nodes[i].edges.push_back(e); // record the edge to the node
 			}
 		}
@@ -231,7 +232,8 @@ int main() {
 			// generate edge distance
 			e.distance = sqrtf(powf(nodes[i].x - nodes[e.dest_id].x, 2) + powf(nodes[i].y - nodes[e.dest_id].y, 2));
 			// generate edge time
-			e.time = (int)rnd_num(30.0,120.0); // for now - let it be minutes of transition
+			float assumed_velocity = rnd_num(40.0,100.0); // pick the assumed average velocity (km/h) allowed for this edge
+			e.time = (int)((e.distance / assumed_velocity) * 60); // for now - let it be minutes of transition
 			nodes[i].edges.push_back(e); // record the edge to the node
 		}
 		nodes[i].hasSpreadEdges = true; // this node has produced nodes, toggle the flag
