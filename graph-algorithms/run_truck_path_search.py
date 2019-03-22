@@ -2,6 +2,10 @@
 Description
 -----------
 
+Dependencies:
+- python 3.6.4 
+- networkx 2.1
+
 1. This program stores in a networkx graph the information imported from a .txt file created by the generator. The file name is passed using the paramenter 'input-dot-graph'.
 
 2. The truck load capacity should be informed, as well as the initial conditions: 
@@ -14,9 +18,9 @@ Description
 
 The algorithm seeks to decide if the truck either goes to a warehouse or a store. 
 
-This decision is based on a threshold(load-threshold-factor) for the current truck load. If it is above the threshold, the decision is to go to the store with the COSTLESS path and which still have demand.
+This decision is based on a threshold(load-threshold-factor) for the current truck load. If it is above the threshold, the decision is to go to the store with the path with the least cost and which still have demand.
 
-On the other hand, if the current truck load is bellow the threshold, the decision is to go to the warehouse with the COSTLESS path and which still have goods to supply.
+On the other hand, if the current truck load is bellow the threshold, the decision is to go to the warehouse with the path with the least cost and which still have goods to supply.
 
 
 # Example to run:
@@ -251,7 +255,18 @@ save_path_algo.write("\nTruck started at node ({}) with initial load of ({}), an
 save_path_algo.write("\nThe algorithm used a threshold factor of ({})\n".format(_load_threshold_factor))
 
 save_path_algo.write("\nThe imported graph file name is '{}'\n".format(_input_dot_graph))
-save_path_algo.write("\nThe list of paths is '{}'\n".format(_input_dot_graph))
+
+
+print("Computing the truck's path overall cost...")
+over_cost = 0
+for path in list_paths:
+    for i in range(0,len(path)-1):
+        # print("edge: {}, {}".format(path[i], path[i+1]))
+        # print("cost: ", graph[path[i]][path[i+1]]['cost'])
+        over_cost += graph[path[i]][path[i+1]]['cost']
+
+save_path_algo.write("\nThe overall cost of the truck's path is: {}".format(over_cost))
+save_path_algo.write("\nThe list of paths is: \n")
 for path in list_paths:
     save_path_algo.write(str(path) + "\n")
 
@@ -268,7 +283,10 @@ save_folder = "{:%Y_%m_%d__%H_%M}_{}.txt".format(datetime.datetime.now(), _exp_n
 save_path_found = open(save_folder,"w+")
 print("Path saved to text file: ", save_folder)
 
-save_path_found.write("Truck started at no: " + str(_truck_start_node) + "\n")
+save_path_found.write("Truck started node: {}\nTruck initial load: {}\nTruck max capacity: {}\n".format(_truck_start_node,_truck_initial_load, _truck_cap_max))
+save_path_found.write("\nThe algorithm used a threshold factor of ({})\n".format(_load_threshold_factor))
+
+save_path_found.write("Truck path overall cost: " + str(over_cost) + "\n")
 for path in list_paths:
     save_path_found.write(str(path) + "\n")
 save_path_found.close()
