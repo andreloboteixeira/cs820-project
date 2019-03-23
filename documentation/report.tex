@@ -447,15 +447,24 @@ The graph generator requires the following parameters to operate with:
 	\item{Total supply and total demand per each good type}
 \end{itemize}
 
-Given these parameters, the graph generator proceeds to create a requested number of nodes. Each node is created as a joint by default. Then, the algorithm pseudorandomly decides which nodes are converted into stores and warehouses. To keep the graph realistic, each node receives pseudorandomly assigned coordinates of {X,Y}, where X,Y \(\in\) [0, MAX\_MAP\_SIZE], where MAX\_MAP\_SIZE corresponds to the scale of the square space where the transportation problem is defined, it defaults to 1000. Originally, it is assumed that the units of map scale are expressed in \textit{kilometers}.  The generator then distributes goods to be supplied one by one between each warehouse until all supplies are allocated. Similarly, each store keeps incrementing the amount of demanded goods one by one until the demand is equally distributed among all stores. Equal distribution of supply and demand among stores and warehouses is assumed to avoid degenerate cases to happen (i.e. most goods are concentrated in a warehouse too close to the stores, one store demands much more goods than the others, etc.).
+Given these parameters, the graph generator proceeds to create a requested number of nodes. Each node is created as a joint by default. Then, the algorithm pseudorandomly decides which nodes are converted into stores and warehouses. To keep the graph realistic, each node receives pseudorandomly assigned coordinates of {X,Y}, where X,Y \(\in\) [0, MAX\_MAP\_SIZE], where MAX\_MAP\_SIZE corresponds to the scale of the square space where the transportation problem is defined, it defaults to 1000. Originally, it is assumed that the units of map scale are expressed in \textit{kilometers}. 
 
-After the node generation is done, the algorithm spreads the required amount of edges. Each time an edge is to be created, there is a 50\% chance for that to happen. To avoid disconnected graphs, the algorithm forces at least one edge to be spread. The destination node is picked pseudorandomly among the rest of the generated nodes. When the edge is created, the {X,Y} coordinates of the source and destination are used to obtain the \textit{distance between nodes}. Then, an \textit{average assumed velocity} is picked within the range of [40,100]. These bounds are assuming that the velocity is expressed in \textit{kilometers per hour}, where lower bound corresponds to speed limits of bigger cities and upper bound resembles the highways. Based on the average assumed velocity of the edge, the time is then calculated as 
+The generator then distributes goods to be supplied one by one between each warehouse until all supplies are allocated. Similarly, each store keeps incrementing the amount of demanded goods one by one until the demand is equally distributed among all stores. Equal distribution of supply and demand among stores and warehouses is assumed to avoid degenerate cases to happen (i.e. most goods are concentrated in a warehouse too close to the stores, one store demands much more goods than the others, etc.).
+
+After the node generation is done, the algorithm spreads the required amount of edges. Each time an edge is to be created, there is a 50\% chance for that to happen. To avoid disconnected graphs, the algorithm forces at least one edge to be spread. The destination node is picked pseudorandomly among the rest of the generated nodes. When the edge is created, the {X,Y} coordinates of the source and destination are used to obtain the \textit{distance between nodes}. Then, an \textit{average assumed velocity} is picked pseudorandomly within the range of [40,100]. These bounds are assuming that the velocity is expressed in \textit{kilometers per hour}, where lower bound corresponds to speed limits of bigger cities and upper bound resembles the highways. Based on the average assumed velocity of the edge, the time is then calculated as 
 \begin{equation*}
 time\_in\_minutes = (distance\_between\_nodes / assumed\_average\_velocity) \times 60
 \end{equation*}
 with floating point of it truncated. The time and distance are the two key parameters that affect the later decision-making, so they are kept in the graph as the background information.
 
-When edges between nodes are created, the graph generator produces a simple text file, that has the problem-related information associated with nodes and edges. Notably, the syntax for such text file is specifically designed to follow the syntax of WebGraphViz, the online graph visualization tool that can produce and display the graph, based on the plain text graph description with all embedded information as a picture[2]. A particular example of such visualization can be seen on Fig. \ref{fig:img1}. The source file for that graph is available in Appendix \ref{sc} of this report.
+When edges between nodes are created, the graph generator produces a simple text file, that has the problem-related information associated with nodes and edges. Notably, the syntax for such text file is specifically designed to follow the syntax of WebGraphViz, the online graph visualization tool that can produce and display the graph, based on the plain text graph description with all embedded information as a picture [2]. A particular example of such visualization can be seen on Fig. \ref{fig:img1}. The source file for that graph is available in Appendix \ref{sc} of this report.
+
+\begin{figure}[h]
+	\centering
+  	\includegraphics[width=0.5\textwidth]{img/img1.png}
+  	\caption{That is our graph!}	
+  	\label{fig:img1}
+\end{figure}
 
 This testing environment combines the commodity of reproducable results, configurable problem scaling and the power of visualization through external tools. In the following sections, we refer to Fig. \ref{fig:img1} as a particular case of using this testing environment.
 
@@ -485,10 +494,9 @@ Accordingly, at the beginning of each segment of the traversed path the truck dr
    \item{If the position of the truck is at a store node with a capacity \textgreater= \textbf{T} $ \times $ MAX\_CAPACITY: it goes and drops goods at the current node.}  
 \end{itemize}
 
-In order to function, our algorithm needs to get some inputs from the graph generator which will guide it through making decisions. The algorithm treats each node as a joint node with some differences in two parameters, the first one represents the supply and the second represents the demand. For warehouse nodes, the demand is always set to zero; contrarily to stores, the supply is set to zero, and finally for joints, both supply and demand are set to zeros. 
+Note that for the sake of simplicity, we assume \textbf{T} = 0.5 for the particular instance of the graph shown in Fig. \ref{fig:img1}.
 
-Another important factor for decision making is the cost of paths which consists of the summation of the distance and the time spent to go from node to node. 
-For simplicity, the truck will initially start at node 0 which is the very first generated node and goes from there. The truck also has some configurations to be considered which are: the initial load of supply which we assumed to be zero at the beginning, as well as the maximum capacity of loaded goods. Moreover, we assigned a threshold value for the truck that serves as a cut off point to guide the truck either to go to a warehouse for loading or to go to a store for unloading goods.
+The algorithm treats each node according to their type with 2 parameters: supply and demand. For warehouse nodes, the demand is always 0; for stores, the supply is always 0; for joints, both supply and demand are 0. 
 
 The truck keeps going back and forth between the stores and the warehouses until either the warehouses run off of supply or the stores stops asking for goods.
 
@@ -499,11 +507,24 @@ The truck keeps going back and forth between the stores and the warehouses until
 
 
 \section{Conclusion}
+After observing the fundamenal principles of the operation of the proposed algorithm, it is important to say that it is capable of functioning with varieties of transportation problem instances. Consequently, with doing some experiments and applying different values to truck capacity we have compared the results and realized that the algorithm also helps companies by giving them an idea about the requirement of the truck capacity to perform better by fulfilling the entire demand and minimizing the overal path cost.
 
-- helps in decision making of trucks capacity, by looking to the overal cost of the solution path given a truck capacity
-- the algorithm give a solution which tries to fulfil the entire demand and minimize the overal path cost
+For our project, we could have done a better job in choosing the right parameters for the threshold value, because it is a very important variable that can make a change in the decision making, as a result affecting the subpaths and the overal trip that the truck makes while visiting stores and warehouses.
+Also, we used the summation of both time and distance in regards of distinguishing the better path which can still be limited and definately can be improved by either choosing a better relation between time and distance (not just simply summing them) or by picking more accurate constraints/heuristics.
 
-Our algorithm does a good job in dealing with the goods transportation problem because it helps 
+
+Below is an experimental table for an instance of our problem where we each time changed the truck capacity value and stored the results:
+\begin{center}
+	\begin{tabular}{ | l | l | p{5cm} |}
+ 		\hline
+ 		Truck Capacity & Number of path segments & Total cost achieved \\ \hline
+ 		10 & 22 segments & 68360.5  \\ \hline
+		15 & 16 segments & 48142.7 \\ \hline
+		20 & 14 segments & 42781.1  \\ \hline
+		22 & 13 segments & 40764.5 \\ \hline
+		23 & 9 segments & 26577.2 \\ \hline
+	\end{tabular}
+\end{center}
 
 % needed in second column of first page if using \IEEEpubid
 %\IEEEpubidadjcol
@@ -624,14 +645,6 @@ Our algorithm does a good job in dealing with the goods transportation problem b
 
 
 \appendices
-\section{Figures}
-Figures go here
-\begin{figure}[h]
-	\centering
-  	\includegraphics[width=0.5\textwidth]{img/img1.png}
-  	\caption{That is our graph!}	
-  	\label{fig:img1}
-\end{figure}
 
 \section{Source codes}
 \label{sc}
