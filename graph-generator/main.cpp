@@ -1,3 +1,7 @@
+// Graph generator - Testing Environment by Mikhail Shchukin (c) 2019
+// Compiles in Visual Studio Express 2012
+// Requires C++11 support compile flags if compiled on older UNIX/Linux environments
+
 #include <vector>
 #include <string>
 #include <time.h>
