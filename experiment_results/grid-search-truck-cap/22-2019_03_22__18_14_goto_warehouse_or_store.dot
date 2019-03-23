@@ -1,16 +1,16 @@
 strict graph  {
 0 [label="\"0 J\": 0, ", type=0, supply=0, demand=0];
-5 [label="\"5 J\": 6, 9, 14, ", type=1, supply=0, demand=0];
-8 [label="\"8 J\": 1, 4, ", type=1, supply=0, demand=0];
-1 [label="\"1 S\": 7, 8, 15, ", type=1, supply=0, demand=0];
-2 [label="\"2 J\": ", type=1, supply=0, demand=0];
-9 [label="\"9 W\": 11, 12, ", type=2, supply=30, demand=0];
-3 [label="\"3 J\": ", type=0, supply=0, demand=0];
-4 [label="\"4 S\": ", type=0, supply=0, demand=22];
-11 [label="\"11 J\": 5, 10, 13, ", type=0, supply=0, demand=0];
-6 [label="\"6 S\": ", type=0, supply=0, demand=23];
-7 [label="\"7 S\": ", type=0, supply=0, demand=23];
-10 [label="\"10 W\": 2, 3, ", type=2, supply=30, demand=0];
+5 [label="\"5 J\": 21, 24, 34, 37, ", type=0, supply=0, demand=0];
+8 [label="\"8 J\": 1, 4, 29, 32, 44, 47, ", type=0, supply=0, demand=0];
+1 [label="\"1 S\": 22, 23, 35, 36, ", type=1, supply=0, demand=0];
+2 [label="\"2 J\": 11, 14, 17, 20, ", type=0, supply=0, demand=0];
+9 [label="\"9 W\": 9, 10, 15, 16, 26, 27, ", type=2, supply=0, demand=0];
+3 [label="\"3 J\": 39, 42, 49, ", type=0, supply=0, demand=0];
+4 [label="\"4 S\": 6, 7, ", type=1, supply=0, demand=0];
+11 [label="\"11 J\": 5, 8, 25, 28, 33, 38, 43, 48, ", type=0, supply=0, demand=0];
+6 [label="\"6 S\": 40, 41, 50, ", type=1, supply=0, demand=0];
+7 [label="\"7 S\": 12, 13, 18, 19, ", type=1, supply=0, demand=0];
+10 [label="\"10 W\": 2, 3, 30, 31, 45, 46, ", type=2, supply=0, demand=0];
 0 -- 5  [label="cost: 824.387", cost="824.387"];
 0 -- 8  [label="cost: 1143.713", cost="1143.713"];
 5 -- 1  [label="cost: 417.602", cost="417.602"];

@@ -551,7 +551,7 @@ Remainging supplies: 3
 
 ------------ Final State of global demand and supply
 
-Total time of the experiment:0.00582412799121812
+Total time of the experiment:0.005975124004180543
 
 
 Truck started at node (0) with initial load of (0), and capacity of (10)
