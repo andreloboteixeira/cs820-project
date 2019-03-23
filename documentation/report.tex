@@ -459,6 +459,52 @@ When edges between nodes are created, the graph generator produces a simple text
 
 This testing environment combines the commodity of reproducable results, configurable problem scaling and the power of visualization through external tools. In the following sections, we refer to Fig. \ref{fig:img1} as a particular case of using this testing environment.
 
+\section{The Routing Algorithm}
+
+Given an instance of the goods transportation graph, the routing algorithm requires the following parameters to attempt at solving the problem:
+\begin{itemize}
+	\item{Truck initial position (defaults to node 0, which is the first generated node)}
+	\item{Truck initial load of supplies (defaults to 0, we assume here that the truck always starts empty)}
+	\item{Truck maximum carry capacity}
+	\item{Resupply threshold \textbf{T} (level of current supply below which a truck restocks at a warehouse, not proceeding to stores)}
+\end{itemize}
+
+With these parameters set, the truck attempts to follow the least expensive path, which is recorded as a solution. The heuristic cost that is used in determination of the least expensive edge to traverse is defined as follows: 
+
+\begin{equation*}
+edge\_cost = time + distance
+\end{equation*}
+
+Accordingly, at the beginning of each segment of the traversed path the truck driver decision-making works as follows:
+\begin{itemize}
+    \item{If the position of the truck is at a warehouse node with a capacity \textless  \ \textbf{T} $ \times $ MAX\_CAPACITY : it goes to the nearest warehouse which is the current node and restocks right there.}
+    \item{If the position of the truck is at a joint node with a capacity \textless \ \textbf{T} $ \times $ MAX\_CAPACITY: it goes to the nearest warehouse to restock with goods.}
+    \item{If the position of the truck  is at a store node with a capacity \textless  \ \textbf{T} $ \times $ MAX\_CAPACITY: it goes to the nearest warehouse to restock with goods.}
+   \item{If the position of the truck is at a warehouse node with a capacity \textgreater= \textbf{T} $ \times $ MAX\_CAPACITY: it goes to the nearest store to drop goods.}
+   \item{If the position of the truck is at a joint node with a capacity \textgreater= \textbf{T} $ \times $ MAX\_CAPACITY: it goes to the nearest store to drop goods.}
+   \item{If the position of the truck is at a store node with a capacity \textgreater= \textbf{T} $ \times $ MAX\_CAPACITY: it goes and drops goods at the current node.}  
+\end{itemize}
+
+In order to function, our algorithm needs to get some inputs from the graph generator which will guide it through making decisions. The algorithm treats each node as a joint node with some differences in two parameters, the first one represents the supply and the second represents the demand. For warehouse nodes, the demand is always set to zero; contrarily to stores, the supply is set to zero, and finally for joints, both supply and demand are set to zeros. 
+
+Another important factor for decision making is the cost of paths which consists of the summation of the distance and the time spent to go from node to node. 
+For simplicity, the truck will initially start at node 0 which is the very first generated node and goes from there. The truck also has some configurations to be considered which are: the initial load of supply which we assumed to be zero at the beginning, as well as the maximum capacity of loaded goods. Moreover, we assigned a threshold value for the truck that serves as a cut off point to guide the truck either to go to a warehouse for loading or to go to a store for unloading goods.
+
+The truck keeps going back and forth between the stores and the warehouses until either the warehouses run off of supply or the stores stops asking for goods.
+
+
+
+
+
+
+
+\section{Conclusion}
+
+- helps in decision making of trucks capacity, by looking to the overal cost of the solution path given a truck capacity
+- the algorithm give a solution which tries to fulfil the entire demand and minimize the overal path cost
+
+Our algorithm does a good job in dealing with the goods transportation problem because it helps 
+
 % needed in second column of first page if using \IEEEpubid
 %\IEEEpubidadjcol
 
@@ -561,42 +607,6 @@ This testing environment combines the commodity of reproducable results, configu
 % Note that, LaTeX2e, unlike IEEE journals/conferences, places
 % footnotes above bottom floats. This can be corrected via the
 % \fnbelowfloat command of the stfloats package.
-
-
-
-
-
-
-\section{The Routing Algorithm}
-In order to function, our algorithm needs to get some inputs from the graph generator which will guide it through making decisions. The algorithm treats each node as a joint node with some differences in two parameters, the first one represents the supply and the second represents the demand. For warehouse nodes, the demand is always set to zero; contrarily to stores, the supply is set to zero, and finally for joints, both supply and demand are set to zeros. 
-\\ Another important factor for decision making is the cost of paths which consists of the summation of the distance and the time spent to go from node to node. 
-For the reason of simplicity, the truck will initially start at node 0 which is the very first generated node and goes from there. The truck also has some configurations to be considered which are: the initial load of supply which we assumed to be zero at the beginning, as well as the maximum capacity of loaded goods. Moreover, we assigned a threshold value for the truck that serves as a cut off point to guide the truck either to go to a warehouse for loading or to go to a store for unloading goods.
-\\The truck keeps going back and forth between the stores and the warehouses until either the warehouses run off of supply or the stores stops asking for goods.
-\\The initial process of the algorithm will go as follow:
-\\
-\begin{itemize}
-    \item{If the initial position of the truck is at a warehouse node with a \textless  \ capacity to the threshold : the truck will go to the nearest warehouse which is the current node and get loaded.}
-    \item{If the initial position of the truck is at a joint node with a \textless \  capacity to the threshold: the truck will go to the nearest warehouse to get loaded with goods.}
-    \item{If the initial position of the truck  is at a store node with a \textless  \ capacity to the threshold: the truck will go to the nearest warehouse to get loaded with goods.}
-   \item{If the initial state of the truck is at a warehouse node with a \textgreater=  capacity to the threshold: the truck will go to the nearest store to unload goods.}
-   \item{If the initial state of the truck is at a joint node with a \textgreater =  capacity to the threshold: the truck will go to the nearest store to unload goods.}
-   \item{If the initial state of the truck is at a store node with a \textgreater =  capacity to the threshold: the truck will unload goods at the current node.}  
-\end{itemize}
-
-
-
-
-
-\section{Conclusion}
-
-- helps in decision making of trucks capacity, by looking to the overal cost of the solution path given a truck capacity
-- the algorithm give a solution which tries to fulfil the entire demand and minimize the overal path cost
-
-Our algorithm does a good job in dealing with the goods transportation problem because it helps 
-
-
-
-
 
 % if have a single appendix:
 %\appendix[Proof of the Zonklar Equations]
