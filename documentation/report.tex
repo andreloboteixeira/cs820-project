@@ -415,7 +415,7 @@ Algorithm, graph, report, logistics.
 % The very first letter is a 2 line initial drop letter followed
 % by the rest of the first word in caps.
 \IEEEPARstart{T}{he} transportation problem is one of the well-known and hot topics both in mathematics and economics.
-It was first conceptualized by Gaspard Monge back in 1781 [1]. Since then, it was analyzed with various approaches, including linear programming and graph-based algorithms. In this project, a graph-based interpretation of the problem is used for reasons of better visualization of potential solutions (i.e. shipping paths) and the graph form being a comfortable environment to design the searching and routing algorithm. This project strives to deal with this problem using graph theory approach and a particular decision-making algorithm in an attempt to acquire an acceptable solution, if it exists, or give partial solution otherwise.
+It was first conceptualized by the French mathematician Gaspard Monge back in 1781 \cite{monge:monge}. Later in 1942, during the World War II, the Soviet mathematician and economist Leonid Kantorovich augmented and refreshed the mathematical definition of the problem from the linear programming point of view \cite{kanto:kanto}. Since then, many attempted to solve this problem using linear programming or graph-based algorithms. In this project, a graph-based interpretation of the problem is used for reasons of better visualization of potential solutions (i.e. shipping paths) and the graph form being a comfortable environment to design the searching and routing algorithm. This project strives to deal with this problem using graph theory approach and a particular decision-making algorithm in an attempt to acquire an acceptable solution, if it exists, or give partial solution otherwise.
 
 From our point of view, the transportation problem can be represented by a graph with nodes of 3 types: \textit{store}, \textit{warehouse} and a \textit{joint}. The edges between nodes represent roads to traverse with associated \textit{distance} and \textit{time}. The stores and warehouses have a certain associated amount of \textit{demand} and \textit{supply} of goods respectively. Joints act solely as transfer points (major cities, towns, etc.). For simplicity, all goods are assumed to be of the \textit{single type}. The problem is finding the way to provide the stores with goods available in the warehouses, \textit{maximizing} the amount of delivered goods, while \textit{minimizing} the transportation costs. It is assumed that the shipping is being done by a \textit{single agent}, a truck with a certain \textit{maximum carry capacity}, that is traversing a certain path while loading and unloading goods where needed.
 
@@ -466,7 +466,7 @@ with floating point of it truncated. The time and distance are the two key param
   	\label{fig:img1}
 \end{figure}
 
-When edges between nodes are created, the graph generator produces a simple text file, that has the problem-related information associated with nodes and edges. Notably, the syntax for such text file is specifically designed to follow the syntax of WebGraphViz, the online graph visualization tool that can produce and display the graph, based on the plain text graph description with all embedded information as a picture [2]. A particular example of such visualization can be seen on Fig. \ref{fig:img1}.
+When edges between nodes are created, the graph generator produces a simple text file, that has the problem-related information associated with nodes and edges. Notably, the syntax for such text file is specifically designed to follow the syntax of GraphViz, the graph visualization tool that can produce and display the graph, based on the plain text graph description with all embedded information as a picture \cite{web:web}. A particular example of such visualization can be seen on Fig. \ref{fig:img1}.
 
 
 
@@ -510,6 +510,23 @@ Note that for the sake of simplicity, we assume \textbf{T} = 0.5 for the particu
 The algorithm treats each node according to their type with 2 parameters: supply and demand. For warehouse nodes, the demand is always 0; for stores, the supply is always 0; for joints, both supply and demand are 0. 
 
 The truck keeps going back and forth between the stores and the warehouses until either all warehouses deplete their supply (which indicates an \textit{overconstrained problem} with only a partial solution available) or there remains no store still waiting for goods (which indicates a \textit{successful termination} of the algorithm with all goods shipped to the stores).
+
+Thus, if the graph shown in Listing \ref{fig:img1} is given for this algorithm with truck maximum capacity set to 20, the result shown on Listing \ref{lst2} below is produced and saved as an output plain text file.
+
+\lstset{basicstyle=\ttfamily}
+\lstinputlisting[language=C,breaklines=true,caption={The output of the routing algorithm solving the problem},captionpos=b,showstringspaces=false,label=lst2]{output.txt}
+
+As seen from Listing \ref{lst2}, the algorithm provides a detailed breakdown of the logic of its operation. The design of the algorithm includes a self-explanatory solver, this algorithm gives its user complete information of the state of the program at each decision-making stage. 
+At the end of the exhaustive report, the algorithm provides the path traversed by the truck as well as the final state of the operation. In this particular instance, since the total demand is 90 and is  less than total supply of 100, the solution is complete and as seen in the resulting file, the total demand and supply are both zero with 10 units of cargo remaining in the truck.
+
+\begin{figure}[h]
+	\centering
+  	\includegraphics[width=0.5\textwidth]{img/img4.png}
+  	\caption{The transportation solution path constructed by amalgamating supply and restock path segments}	
+  	\label{fig:img4}
+\end{figure}
+
+Fig. \ref{fig:img4} demonstrates the solution path that the described algorithm suggests for a given instance of the problem acquired through the testing environment that produced the base graph with transportation problem parameters.
 
 
 \section{Conclusion}
@@ -674,12 +691,9 @@ In the described algorithm, the decision-making heuristic of combined time and d
 %
 
 
-\appendices
-
 % you can choose not to have a title for an appendix
 % if you want by leaving the argument blank
-\section{Tools used}
-Appendix two text goes here.
+
 
 
 % Can use something like this to put references on a page
@@ -714,9 +728,14 @@ Appendix two text goes here.
 % (used to reserve space for the reference number labels box)
 \begin{thebibliography}{1}
 
-\bibitem{IEEEhowto:kopka}
-H.~Kopka and P.~W. Daly, \emph{A Guide to \LaTeX}, 3rd~ed.\hskip 1em plus
-  0.5em minus 0.4em\relax Harlow, England: Addison-Wesley, 1999.
+\bibitem{monge:monge}
+G. Monge. \emph{Mémoire sur la théorie des déblais et des remblais. Histoire de l’Académie Royale des Sciences de Paris, avec les Mémoires de Mathématique et de Physique pour la même année}. , pages 666–704, 1781.
+
+\bibitem{kanto:kanto}
+L. Kantorovich. \emph{On the translocation of masses}. C.R. (Doklady) Acad. Sci. URSS (N.S.), 37:199–201, 1942.
+
+\bibitem{web:web}
+Graphviz.org. \emph{Graphviz - Graph Visualization Software}. 2019. [online] Available at: http://www.graphviz.org/ [Accessed 24 Mar. 2019].
 
 \end{thebibliography}
 
