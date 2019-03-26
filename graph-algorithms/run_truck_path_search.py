@@ -108,7 +108,7 @@ while sum(store_demand_list) != 0 and (truck_curr_load + sum(warehouse_supply_li
     
     iteration +=1
     if _log_alg:
-        save_path_algo.write("\n----------- Iteration {}: Truck at node {}\nCurrent STAUS:\nTotal Demand: {}/{}  Demand list: {}\nTotal Supply: {}/{}  Supply list: {}\nTruck Current Load: {}/{}\n\n".format(iteration, truck_curr_node, sum(store_demand_list), tot_dem, store_demand_list, sum(warehouse_supply_list), tot_sup, warehouse_supply_list, truck_curr_load, _truck_cap_max))
+        save_path_algo.write("\n----------- Iteration {}: Truck at node {}\nCurrent STATUS:\nTotal Demand: {}/{}  Demand list: {}\nTotal Supply: {}/{}  Supply list: {}\nTruck Current Load: {}/{}\n\n".format(iteration, truck_curr_node, sum(store_demand_list), tot_dem, store_demand_list, sum(warehouse_supply_list), tot_sup, warehouse_supply_list, truck_curr_load, _truck_cap_max))
     
     # go to the costless warehouse
     if truck_curr_load < _load_threshold:
