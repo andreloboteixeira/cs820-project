@@ -470,7 +470,7 @@ When edges between nodes are created, the graph generator produces a simple text
 
 
 
-Evidently, the graph generator provides a fairly connected graph that represents a particular instance of a transportation problem. Each node shows a tuple of \textit{\{id,type\}}. Node 0 is the first generated node and the total number of transportation nodes in this particular example is 12. To generate this example, the graph generator is initialized with 2 edges to spread from each node, 2 warehouses and 4 stores to be placed. The total goods demand is set to 90 and the total supply of goods is set to 100, which is spread equally across stores and warehouses respectively. Note, that in order to reduce the visible complexity of the picture, the visual part does not contain all the problem parameters, such as supply or demand, straight on it. Nevertheless, all crucial problem parameters are still stored in the source file structure, as can be seen on Listing \ref{lst1} below.
+Evidently, the graph generator provides a fairly connected graph that represents a particular instance of a transportation problem. Each node shows a tuple of \textit{\{id,type\}}. Node 0 is the first generated node and the total number of transportation nodes in this particular example is 12. To generate this example, the graph generator is initialized with 2 edges to spread from each node, 2 warehouses and 4 stores to be placed. The total goods demand is set to 90 and the total supply of goods is set to 100, which is spread equally across stores and warehouses respectively. Note, that in order to reduce the visible complexity of the picture, the visual part does not contain all the problem parameters, such as supply or demand, straight on it. Nevertheless, all crucial problem parameters are still stored in the source file structure, as can be seen on Listing \ref{lst1}.
 
 \lstset{basicstyle=\ttfamily}
 \lstinputlisting[language=C,breaklines=true,caption={The underlying textual form of the graph},captionpos=b,showstringspaces=false,label=lst1]{graph.txt}
@@ -511,10 +511,8 @@ The algorithm treats each node according to their type with 2 parameters: supply
 
 The truck keeps going back and forth between the stores and the warehouses until either all warehouses deplete their supply (which indicates an \textit{overconstrained problem} with only a partial solution available) or there remains no store still waiting for goods (which indicates a \textit{successful termination} of the algorithm with all goods shipped to the stores).
 
-Thus, if the graph shown in Listing \ref{fig:img1} is given for this algorithm with truck maximum capacity set to 20, the result shown on Listing \ref{lst2} below is produced and saved as an output plain text file.
+Thus, if the graph shown in Listing \ref{fig:img1} is given for this algorithm with truck maximum capacity set to 20, the result shown on Listing \ref{lst2} in Appendix \ref{app1} is produced and saved as an output plain text file.
 
-\lstset{basicstyle=\ttfamily}
-\lstinputlisting[language=C,breaklines=true,caption={The output of the routing algorithm solving the problem},captionpos=b,showstringspaces=false,label=lst2]{output.txt}
 
 As seen from Listing \ref{lst2}, the algorithm provides a detailed breakdown of the logic of its operation. The design of the algorithm includes a self-explanatory solver, this algorithm gives its user complete information of the state of the program at each decision-making stage. 
 At the end of the exhaustive report, the algorithm provides the path traversed by the truck as well as the final state of the operation. In this particular instance, since the total demand is 90 and is  less than total supply of 100, the solution is complete and as seen in the resulting file, the total demand and supply are both zero with 10 units of cargo remaining in the truck.
@@ -547,17 +545,31 @@ After observing the fundamenal operation principles of the proposed algorithm, i
 	\end{tabular}
 \end{table}
 
-However, it is notable that the change is not quite proportional. As seen on Fig. \ref{fig:img2} below, changing the truck capacity produces a slope-like response in the cost reduction and in the number of path segments produced.
+However, it is notable that the change is not quite proportional. As seen on Fig. \ref{fig:img2} and Fig. \ref{fig:img3} below, changing the truck capacity produces a slope-like response in the cost reduction and in the number of path segments produced.
+
+%\begin{figure}[h]
+%\begin{tabular}{ll}
+%\includegraphics[width=0.5\textwidth]{img/img2.png}
+%&
+%\includegraphics[width=0.5\textwidth]{img/img3.png}
+%\end{tabular}
+%\caption{Left: Truck capacity increase reduces the number of shipping path segments.
+%Right: Truck capacity increase gradually reduces the overall path cost}
+%\label{fig:img2}
+%\end{figure}
 
 \begin{figure}[h]
-\begin{tabular}{ll}
-\includegraphics[width=0.5\textwidth]{img/img2.png}
-&
-\includegraphics[width=0.5\textwidth]{img/img3.png}
-\end{tabular}
-\caption{Left: Truck capacity increase reduces the number of shipping path segments.
-Right: Truck capacity increase gradually reduces the overall path cost}
-\label{fig:img2}
+	\centering
+  	\includegraphics[width=0.6\textwidth]{img/img2.png}
+  	\caption{Truck capacity increase reduces the number of shipping path segments}	
+  	\label{fig:img2}
+\end{figure}
+
+\begin{figure}[h]
+	\centering
+  	\includegraphics[width=0.6\textwidth]{img/img3.png}
+  	\caption{Truck capacity increase gradually reduces the overall path cost}	
+  	\label{fig:img3}
 \end{figure}
 
 Given such statistics, it is possible to estimate how much each added unit of capacity corresponds to the decrease in the overall solution cost for this particular instance of the problem. This directly translates into the economic reality of any business involving transportation of some items between certain locations on the map. Such algorithm is thus capable to provide not only a solution to the given problem with set parameters, but also \textit{an ability to estimate the potential alternatives to a given solution with different parameters}. 
@@ -709,6 +721,12 @@ https://github.com/andreloboteixeira/cs820-project
 \fi
 
 
+\appendices
+
+\section{Output listing}
+\label{app1}
+\lstset{basicstyle=\ttfamily}
+\lstinputlisting[language=C,breaklines=true,caption={The output of the routing algorithm solving the problem},captionpos=b,showstringspaces=false,label=lst2]{output.txt}
 
 % trigger a \newpage just before the given reference
 % number - used to balance the columns on the last page
